@@ -1,0 +1,5 @@
+# Ignore artifacts:
+.next
+.vscode
+node_modules
+.github
