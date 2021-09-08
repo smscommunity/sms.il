@@ -1,0 +1,21 @@
+.ilTable {
+    width: 50%;
+    margin: auto;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+.ilTableHeader th {
+    font-size: 28px;
+    border: 2px solid black;
+    padding: 0 8px;
+    background-color: brown;
+}
+
+.ilTable tr:nth-child(odd) {
+    background-color: rgb(44, 44, 83);
+}
+
+.ilTable tr:nth-child(even) {
+    background-color: rgb(25, 25, 73);
+}

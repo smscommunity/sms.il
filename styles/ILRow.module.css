@@ -1,0 +1,41 @@
+.ilRow {
+    font-size: 20px;
+}
+
+.ilRow td {
+    border-bottom: 1px solid black;
+    border-right: 2px solid black;
+    border-left: 2px solid black;
+    padding: 4px;
+}
+
+.ilRow td:not(:last-of-type) {
+    border-right: 2px solid black;
+}
+
+.ilRow .center {
+    text-align: center;
+}
+
+.ilRow .comments {
+    max-width: 50%;
+    overflow-wrap: anywhere;
+}
+
+.ilFirst {
+    background-color: gold !important;
+    font-size: 26px;
+    color: black;
+}
+
+.ilSecond {
+    background-color: silver !important;
+    font-size: 24px;
+    color: black;
+}
+
+.ilThird {
+    background-color: #cd7f32 !important;
+    font-size: 22px;
+    color: black;
+}
