@@ -50,7 +50,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.14.6":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2":
   version "7.15.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
   integrity sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==
@@ -234,11 +234,6 @@
   integrity sha512-UuF0hyWNnLTT4xNJdrQx6OWYMNlPRBtt3fKCaROIx48boQyXkQ4YDDwTEQNi9mlsRX0Hpc6AnFKkDZ6IXkxD4g==
   dependencies:
     "@types/react" "*"
-
-"@types/node-xlsx@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@types/node-xlsx/-/node-xlsx-0.15.2.tgz#1371c4af8fe2b6626253f8b85719adfe88355b20"
-  integrity sha512-rG1SmpWvSkse23rL/5bgej5yQ2y+WoWMrKE3iE4upuHWQwzdLCYEkrwr1pMZDx642R/tJCDGGUig7U/cT24Ecg==
 
 "@types/node@*":
   version "16.7.13"
@@ -619,11 +614,6 @@ browserslist@4.16.6:
     electron-to-chromium "^1.3.723"
     escalade "^3.1.1"
     node-releases "^1.1.71"
-
-buffer-from@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
-  integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
 buffer-xor@^1.0.3:
   version "1.0.3"
@@ -2194,15 +2184,6 @@ node-releases@^1.1.71:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.75.tgz#6dd8c876b9897a1b8e5a02de26afa79bb54ebbfe"
   integrity sha512-Qe5OUajvqrqDSy6wrWFmMwfJ0jVgwiw4T3KqmbTcZ62qW0gQkheXYhcFM1+lOVcGUoRxcEcfyvFMAnDgaF1VWw==
 
-node-xlsx@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/node-xlsx/-/node-xlsx-0.17.1.tgz#29d7d38442bc4e7135d33758987cd22b1c3b290e"
-  integrity sha512-3olJEnol/Stg/Zj3nb7mCS5VivRsd7bgHapILhU/qArChftYO7SUXE2nFS0586I2XDaqTwxIdcEx/AxXxvjXHA==
-  dependencies:
-    "@babel/runtime" "^7.14.6"
-    buffer-from "^1.1.1"
-    xlsx "^0.17.0"
-
 normalize-package-data@^2.3.2:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/normalize-package-data/-/normalize-package-data-2.5.0.tgz#e66db1838b200c1dfc233225d12cb36520e234a8"
@@ -3372,7 +3353,7 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
-xlsx@^0.17.0, xlsx@^0.17.1:
+xlsx@^0.17.1:
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.17.1.tgz#2557400d594998301831ef60b08ddde80f2842ee"
   integrity sha512-SrvK+kMEjiVIKYyJSjSIJwzm2cZn8nQWVh708g7O+pTsmgjoa+uYNLEUn7jmwQdMI/ffCHcY5yEvwBXssBwpRA==
