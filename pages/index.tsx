@@ -27,7 +27,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     let selectedILData: LevelData | undefined;
 
     if (selectedIL != -1) {
-        selectedILData = levelData[selectedIL];
+        selectedILData = levelData[selectedIL - 7];
         filteredIls = ilData[selectedIL];
     } else {
         selectedILData = undefined;
