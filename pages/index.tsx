@@ -104,7 +104,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
                 ) : undefined}
             </div>
             <footer className={styles.ilFooter}>
-                Created with 🌞 by Lego | <a href="">Github</a> |{' '}
+                Created with 🌞 by Lego | <a href="https://github.com/Lego6245/sms.il">Github</a> |{' '}
                 <a href="https://sunmar.io/il">Main Sheet</a>
             </footer>
         </div>
