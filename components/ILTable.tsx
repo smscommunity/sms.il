@@ -1,14 +1,16 @@
 import ILData from '../types/ILData';
 import ILRow from './ILRow';
 import styles from '../styles/ILTable.module.css';
-import LevelData from '../types/LevelData';
 
 export interface ILTableProps {
     ils: ILData[];
-    ilInfo: LevelData;
+    showWorld?: boolean;
+    showEpisode?: boolean;
+    hidePlayer?: boolean;
 }
 
 export default function ILTable(props: ILTableProps) {
+    const { ils, showWorld, showEpisode, hidePlayer } = props;
     return (
         <div
             style={{
@@ -18,15 +20,25 @@ export default function ILTable(props: ILTableProps) {
                 <thead className={styles.ilTableHeader}>
                     <tr>
                         <th>Rank</th>
-                        <th>Player</th>
+                        {!hidePlayer && <th>Player</th>}
+                        {showWorld && <th>World</th>}
+                        {showEpisode && <th>Episode</th>}
                         <th>Time</th>
                         <th>VOD</th>
                         <th>Comment</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.ils.length > 0 &&
-                        props.ils.map(il => <ILRow key={il.playerName} data={il} rank={il.rank} />)}
+                    {ils.length > 0 &&
+                        ils.map(il => (
+                            <ILRow
+                                key={il.playerData.name + il.ilData.id}
+                                data={il}
+                                showWorld={showWorld}
+                                showEpisode={showEpisode}
+                                hidePlayer={hidePlayer}
+                            />
+                        ))}
                 </tbody>
             </table>
         </div>

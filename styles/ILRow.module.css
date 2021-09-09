@@ -44,3 +44,12 @@
     font-size: 22px;
     color: black;
 }
+
+.medalHolder {
+    display: flex;
+    justify-content: space-around;
+}
+
+.medalHolder > span {
+    width: 33%;
+}

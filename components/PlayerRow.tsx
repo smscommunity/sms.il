@@ -1,20 +1,15 @@
-import ILData from '../types/ILData';
+import PlayerData from '../types/PlayerData';
 import styles from '../styles/ILRow.module.css';
 import React from 'react';
-import Linkify from 'linkifyjs/react';
 import Link from 'next/link';
 
-export interface ILRowProps {
-    data: ILData;
-    showWorld?: boolean;
-    showEpisode?: boolean;
-    hidePlayer?: boolean;
+export interface PlayerRowProps {
+    data: PlayerData;
 }
 
-export default function ILRow(props: ILRowProps) {
-    const { data, showWorld, showEpisode, hidePlayer } = props;
-    const { playerData, time, link, comment, rank } = data;
-    const { name } = playerData;
+export default function PlayerRow(props: PlayerRowProps) {
+    const { data } = props;
+    const { name, rank, points, medals } = data;
     return (
         <>
             <tr
@@ -32,22 +27,16 @@ export default function ILRow(props: ILRowProps) {
                 <td className={styles.center}>
                     {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
                 </td>
-                {!hidePlayer && (
-                    <td>
-                        <Link href={'/player/' + name}>{name}</Link>
-                    </td>
-                )}
-                {showWorld && <td>{data.ilData.world}</td>}
-                {showEpisode && (
-                    <td>
-                        {data.ilData.episode +
-                            (data.ilData.subCategory ? ' // ' + data.ilData.subCategory : '')}
-                    </td>
-                )}
-                <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
-                <td className={styles.center}>{!!link ? <a href={link}>✅</a> : '❌'}</td>
-                <td className={styles.comments}>
-                    <Linkify>{comment}</Linkify>
+                <td>
+                    <Link href={'/player/' + name}>{name}</Link>
+                </td>
+                <td className={styles.center}>{points}</td>
+                <td>
+                    <div className={styles.medalHolder}>
+                        <span>{'🥇' + medals.gold}</span>
+                        <span>{'🥈' + medals.silver}</span>
+                        <span>{'🥉' + medals.bronze}</span>
+                    </div>
                 </td>
             </tr>
         </>

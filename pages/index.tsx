@@ -5,118 +5,59 @@ import loadILXls from '../scripts/loadILXls';
 import ILData from '../types/ILData';
 import LevelData from '../types/LevelData';
 import styles from '../styles/index.module.css';
-import Tippy from '@tippyjs/react';
 import Head from 'next/head';
-import 'tippy.js/dist/tippy.css';
+import Footer from '../components/Footer';
+import FilterHeader from '../components/FilterHeader';
+import PlayerTable from '../components/PlayerTable';
+import PlayerData from '../types/PlayerData';
 
 interface ILPageProps {
     ilData: ILData[][];
     levelData: LevelData[];
+    playerData: PlayerData[];
     timestamp: number;
 }
 
 const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
-    const { ilData, levelData, timestamp } = props;
+    const { ilData, levelData, playerData, timestamp } = props;
     const dateStamp = new Date(timestamp);
-    const primarySelect = [...new Set(levelData.filter(data => !!data).map(data => data.world))];
-    const [selectedWorld, setSelectedWorld] = React.useState('none');
     const [selectedIL, setSelectedIL] = React.useState(-1);
-    const onWorldChanged = React.useCallback((cb: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedWorld(cb.currentTarget.value);
-        setSelectedIL(-1);
-    }, []);
-    const onSelectedILChanged = React.useCallback((cb: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedIL(parseInt(cb.currentTarget.value));
-    }, []);
-    const filteredEpisodes: (LevelData & { ilId: number })[] = [];
-    if (selectedWorld != 'none') {
-        levelData.forEach((data, index) => {
-            if (data?.world == selectedWorld) {
-                filteredEpisodes.push({
-                    ilId: index,
-                    ...data,
-                });
-            }
-        });
-    }
 
     let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
 
-    if (selectedWorld != 'none' && selectedIL != -1) {
+    if (selectedIL != -1) {
         selectedILData = levelData[selectedIL];
         filteredIls = ilData[selectedIL];
     } else {
         selectedILData = undefined;
         filteredIls = [];
     }
+    const headerText = !!selectedILData
+        ? selectedILData.world +
+          ' - ' +
+          selectedILData.episode +
+          (!!selectedILData.subCategory ? ' (' + selectedILData.subCategory + ')' : '')
+        : 'Super Mario Sunshine IL Leaderboards';
     return (
         <div className={styles.indexContainer}>
             <Head>
                 <title>Super Mario Sunshine IL Leaderboard</title>
             </Head>
-            <header className={styles.ilHeader}>
-                <div className={styles.ilSelector}>
-                    <label htmlFor="world-select">World</label>
-                    <select name="world" id="world-select" onChange={onWorldChanged}>
-                        <option value="none" key="none"></option>
-                        {primarySelect.map(world => {
-                            return (
-                                <option key={world} value={world}>
-                                    {world}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <label htmlFor="episode-select">Episode</label>
-                    <select
-                        name="episode"
-                        id="episode-select"
-                        disabled={filteredEpisodes.length == 0}
-                        onChange={onSelectedILChanged}>
-                        <option value="-1" key="none"></option>
-                        {filteredEpisodes.map(episode => {
-                            return (
-                                <option key={episode.ilId} value={episode.ilId}>
-                                    {episode.episode +
-                                        (episode.subCategory ? ' // ' + episode.subCategory : '')}
-                                </option>
-                            );
-                        })}
-                    </select>
-                </div>
-                {!!selectedILData ? (
-                    <h2>
-                        {selectedILData.world +
-                            ' - ' +
-                            selectedILData.episode +
-                            (!!selectedILData.subCategory
-                                ? ' (' + selectedILData.subCategory + ')'
-                                : '')}
-                    </h2>
-                ) : (
-                    <h2>Super Mario Sunshine IL Leaderboards</h2>
-                )}
-            </header>
+            <FilterHeader
+                selectedIL={selectedIL}
+                levelData={levelData}
+                onSelectedILChange={setSelectedIL}
+                headerText={headerText}
+            />
             <div>
                 {filteredIls.length > 0 ? (
-                    <ILTable ils={filteredIls} ilInfo={levelData[selectedIL]} />
-                ) : undefined}
+                    <ILTable ils={filteredIls} />
+                ) : (
+                    <PlayerTable players={playerData} />
+                )}
             </div>
-            <footer className={styles.ilFooter}>
-                Created with 🌞 by Lego |{' '}
-                <Tippy content={'This website updates approximately every 15 minutes.'}>
-                    <span
-                        style={{
-                            padding: '0 4px',
-                        }}>
-                        {' '}
-                        Last Updated: {dateStamp.toLocaleString()}
-                    </span>
-                </Tippy>{' '}
-                | <a href="https://github.com/Lego6245/sms.il">Github</a> |{' '}
-                <a href="https://sunmar.io/il">Main Sheet</a>
-            </footer>
+            <Footer dateStamp={dateStamp} />
         </div>
     );
 };
@@ -124,12 +65,14 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async context => {
-    const data = loadILXls();
+    const { ilData, levelData, playerData } = loadILXls();
     const timestamp = Date.now();
     return {
         props: {
-            ...data,
-            timestamp: timestamp,
+            ilData,
+            levelData,
+            timestamp,
+            playerData,
         },
     };
 };
