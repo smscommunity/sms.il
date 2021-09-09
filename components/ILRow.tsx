@@ -2,15 +2,19 @@ import ILData from '../types/ILData';
 import styles from '../styles/ILRow.module.css';
 import React from 'react';
 import Linkify from 'linkifyjs/react';
+import Link from 'next/link';
 
 export interface ILRowProps {
     data: ILData;
-    rank: number;
+    showWorld?: boolean;
+    showEpisode?: boolean;
+    hidePlayer?: boolean;
 }
 
 export default function ILRow(props: ILRowProps) {
-    const { rank, data } = props;
-    const { playerName, time, link, comment } = data;
+    const { data, showWorld, showEpisode, hidePlayer } = props;
+    const { playerData, time, link, comment, rank } = data;
+    const { name } = playerData;
     return (
         <>
             <tr
@@ -28,7 +32,18 @@ export default function ILRow(props: ILRowProps) {
                 <td className={styles.center}>
                     {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
                 </td>
-                <td>{playerName}</td>
+                {!hidePlayer && (
+                    <td>
+                        <Link href={'/player/' + name}>{name}</Link>
+                    </td>
+                )}
+                {showWorld && <td>{data.ilData.world}</td>}
+                {showEpisode && (
+                    <td>
+                        {data.ilData.episode +
+                            (data.ilData.subCategory ? ' // ' + data.ilData.subCategory : '')}
+                    </td>
+                )}
                 <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
                 <td className={styles.center}>{!!link ? <a href={link}>✅</a> : '❌'}</td>
                 <td className={styles.comments}>

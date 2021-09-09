@@ -1,0 +1,21 @@
+.playerTable {
+    width: 50%;
+    margin: auto;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+.playerTableHeader th {
+    font-size: 28px;
+    border: 2px solid black;
+    padding: 0 8px;
+    background-color: brown;
+}
+
+.playerTable tr:nth-child(odd) {
+    background-color: rgb(44, 44, 83);
+}
+
+.playerTable tr:nth-child(even) {
+    background-color: rgb(25, 25, 73);
+}

@@ -22,17 +22,27 @@ export default function () {
     const sheetJson = sheet_to_json(ilSheet, { header: 1, range: 3 });
 
     const playerData: PlayerData[] = [];
+    const playerToIlMap: Map<string, ILData[]> = new Map<string, ILData[]>();
     const unsortedData: Omit<ILData, 'rank'>[][] = new Array(levelData.length + 7);
     // Index 0: Name
     // Index 1: Points
     // Index 2-4: Medals
     // Index 5-6: Entries + Videos
     // Index 7 -> End: ILs
-    sheetJson.forEach((element: RawSheetData[]) => {
+    let playerRank = 0;
+    let playerSkip = 0;
+    sheetJson.forEach((element: RawSheetData[], rowIndex) => {
         const playerName = element[0]?.time;
         if (!!playerName) {
-            playerData.push({
+            if (rowIndex > 0 && sheetJson[rowIndex - 1][1].time == element[1].time) {
+                playerSkip++;
+            } else {
+                playerRank = playerRank + playerSkip + 1;
+                playerSkip = 0;
+            }
+            const playerEntry = {
                 name: playerName,
+                rank: playerRank,
                 points: parseInt(element[1].time),
                 medals: {
                     gold: parseInt(element[2].time),
@@ -41,13 +51,14 @@ export default function () {
                 },
                 submissions: parseInt(element[5].time),
                 comment: element[0].comment ?? null,
-            });
+            };
+            playerData.push(playerEntry);
             const ils = element.slice(7);
             ils.forEach((submission, index) => {
                 if (!!submission && !!submission.time) {
                     const newData: Omit<ILData, 'rank'> = {
-                        ilId: index,
-                        playerName: playerName,
+                        ilData: levelData[index]!,
+                        playerData: playerEntry,
                         time: parseTime(submission.time),
                         link: submission.link ?? null,
                         comment: submission.comment ?? null,
@@ -74,10 +85,18 @@ export default function () {
                 rank = rank + skip + 1;
                 skip = 0;
             }
-            return {
+            const newData = {
                 ...value,
                 rank,
             };
+
+            if (playerToIlMap.has(newData.playerData.name)) {
+                playerToIlMap.get(newData.playerData.name)?.push(newData);
+            } else {
+                playerToIlMap.set(newData.playerData.name, [newData]);
+            }
+
+            return newData;
         });
     });
 
@@ -85,6 +104,7 @@ export default function () {
         levelData,
         playerData,
         ilData,
+        playerToIlMap,
     };
 }
 
@@ -117,6 +137,7 @@ function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (Leve
             world: primaryHeader.replace(/[\n\r]/g, ''),
             episode: secondaryHeader.replace(/[\n\r]/g, ''),
             subCategory: specificHeaders[i]?.replace(/[\n\r]/g, '') ?? null,
+            id: i,
         };
         headers.push({
             ...levelData,
