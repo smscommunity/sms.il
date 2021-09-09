@@ -1,0 +1,45 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run.
+on:
+    push:
+        branches: # triggers on any push to master
+            - main
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2-beta
+              with:
+                node-version: '12'
+            - uses: actions/cache@v2
+              with:
+                path: ${{ github.workspace }}/.next/cache
+                key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+            - name: Cache + Install
+              uses: bahmutov/npm-install@v1
+            - name: Test
+              run: npm run test --if-present
+            - name: Build
+              run: npm run build --if-present
+            - name: Export
+              run: |
+                npm run export
+                touch out/.nojekyll
+            - name: Deploy folder to pages
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_dir: ./out
+                user_name: 'John IL'
+                user_email: 'saveeveryframe@github.com'
