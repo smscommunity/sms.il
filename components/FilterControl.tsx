@@ -11,17 +11,24 @@ export interface FilterControlProps {
 
 export default function FilterControl(props: FilterControlProps) {
     const { selectedIL, levelData, controlledSelectedWorld } = props;
+    const tempSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = !!controlledSelectedWorld
         ? controlledSelectedWorld
-        : React.useState('none');
+        : tempSelectedWorld;
     const primarySelect = [...new Set(levelData.filter(data => !!data).map(data => data.world))];
-    const onWorldChanged = React.useCallback((cb: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedWorld(cb.currentTarget.value);
-        props.onSelectedILChange(-1);
-    }, []);
-    const onSelectedILChanged = React.useCallback((cb: React.ChangeEvent<HTMLSelectElement>) => {
-        props.onSelectedILChange(parseInt(cb.currentTarget.value));
-    }, []);
+    const onWorldChanged = React.useCallback(
+        (cb: React.ChangeEvent<HTMLSelectElement>) => {
+            setSelectedWorld(cb.currentTarget.value);
+            props.onSelectedILChange(-1);
+        },
+        [props.onSelectedILChange]
+    );
+    const onSelectedILChanged = React.useCallback(
+        (cb: React.ChangeEvent<HTMLSelectElement>) => {
+            props.onSelectedILChange(parseInt(cb.currentTarget.value));
+        },
+        [props.onSelectedILChange]
+    );
 
     const filteredEpisodes: LevelData[] = [];
     if (selectedWorld != 'none') {
