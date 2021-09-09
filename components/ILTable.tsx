@@ -26,7 +26,7 @@ export default function ILTable(props: ILTableProps) {
                 </thead>
                 <tbody>
                     {props.ils.length > 0 &&
-                        props.ils.map(il => <ILRow data={il} rank={il.rank} />)}
+                        props.ils.map(il => <ILRow key={il.playerName} data={il} rank={il.rank} />)}
                 </tbody>
             </table>
         </div>
