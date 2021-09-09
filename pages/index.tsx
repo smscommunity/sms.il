@@ -6,6 +6,7 @@ import ILData from '../types/ILData';
 import LevelData from '../types/LevelData';
 import styles from '../styles/index.module.css';
 import Tippy from '@tippyjs/react';
+import Head from 'next/head';
 import 'tippy.js/dist/tippy.css';
 
 interface ILPageProps {
@@ -51,6 +52,9 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     }
     return (
         <div className={styles.indexContainer}>
+            <Head>
+                <title>Super Mario Sunshine IL Leaderboard</title>
+            </Head>
             <header className={styles.ilHeader}>
                 <div className={styles.ilSelector}>
                     <label htmlFor="world-select">World</label>
