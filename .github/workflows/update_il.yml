@@ -1,0 +1,45 @@
+# Shamelessly borrowed + modified from speculative/hodllive
+
+name: Grab Current Schedule Data
+on:
+  workflow_dispatch:
+  schedule:
+    # Run every 15 minutes
+    - cron: "*/15 * * * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.PAT }}
+        
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.0.0
+      
+      - name: Install python dependencies
+        shell: bash
+        run: poetry install
+      
+      - name: Do the subscriber count update
+        shell: bash
+        env:
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+        run: poetry run python ./scripts/downloadILSheet.py "$SHEET_ID"
+    
+      - name: Commit & push
+        uses: stefanzweifel/git-auto-commit-action@v4.6.0
+        with:
+          commit_message: Updating IL DB
+          commit_user_name: John IL, President of IL
+          commit_user_email: saveroftheframes@github.com
+          commit_author: John IL <saveroftheframes@github.com>
