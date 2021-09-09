@@ -4,7 +4,7 @@ import styles from '../styles/ILTable.module.css';
 import LevelData from '../types/LevelData';
 
 export interface ILTableProps {
-    ils: (ILData & { rank: number })[];
+    ils: ILData[];
     ilInfo: LevelData;
 }
 

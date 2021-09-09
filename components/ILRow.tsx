@@ -1,5 +1,7 @@
 import ILData from '../types/ILData';
 import styles from '../styles/ILRow.module.css';
+import React from 'react';
+import Linkify from 'linkifyjs/react';
 
 export interface ILRowProps {
     data: ILData;
@@ -29,7 +31,9 @@ export default function ILRow(props: ILRowProps) {
                 <td>{playerName}</td>
                 <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
                 <td className={styles.center}>{!!link ? <a href={link}>✅</a> : '❌'}</td>
-                <td className={styles.comments}>{comment}</td>
+                <td className={styles.comments}>
+                    <Linkify>{comment}</Linkify>
+                </td>
             </tr>
         </>
     );

@@ -22,7 +22,7 @@ export default function () {
     const sheetJson = sheet_to_json(ilSheet, { header: 1, range: 3 });
 
     const playerData: PlayerData[] = [];
-    const ilData: ILData[] = [];
+    const unsortedData: Omit<ILData, 'rank'>[][] = new Array(levelData.length + 7);
     // Index 0: Name
     // Index 1: Points
     // Index 2-4: Medals
@@ -45,16 +45,40 @@ export default function () {
             const ils = element.slice(7);
             ils.forEach((submission, index) => {
                 if (!!submission && !!submission.time) {
-                    ilData.push({
+                    const newData: Omit<ILData, 'rank'> = {
                         ilId: index,
                         playerName: playerName,
                         time: parseTime(submission.time),
                         link: submission.link ?? null,
                         comment: submission.comment ?? null,
-                    });
+                    };
+                    if (!!unsortedData[index]) {
+                        unsortedData[index].push(newData);
+                    } else {
+                        unsortedData[index] = [newData];
+                    }
                 }
             });
         }
+    });
+
+    const ilData: ILData[][] = unsortedData.map((ilList, index) => {
+        const selectedILData = levelData[index];
+        ilList.sort((a, b) => (selectedILData!.isReverse ? b.time - a.time : a.time - b.time));
+        let rank = 0;
+        let skip = 0;
+        return ilList.map((value, index) => {
+            if (index > 0 && ilList[index - 1].time == value.time) {
+                skip++;
+            } else {
+                rank = rank + skip + 1;
+                skip = 0;
+            }
+            return {
+                ...value,
+                rank,
+            };
+        });
     });
 
     return {
@@ -90,9 +114,9 @@ function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (Leve
         primaryHeader = primaryHeaders[i] ?? primaryHeader;
         secondaryHeader = secondaryHeaders[i] ?? secondaryHeader;
         const levelData = {
-            world: primaryHeader,
-            episode: secondaryHeader,
-            subCategory: specificHeaders[i] ?? null,
+            world: primaryHeader.replace(/[\n\r]/g, ''),
+            episode: secondaryHeader.replace(/[\n\r]/g, ''),
+            subCategory: specificHeaders[i]?.replace(/[\n\r]/g, '') ?? null,
         };
         headers.push({
             ...levelData,
@@ -167,7 +191,11 @@ function make_json_row(
             // Our monkeypatch is here.
             var v = {
                 time: val.v,
-                link: val.l?.Target,
+                link:
+                    val.l?.Target ??
+                    (val.f?.indexOf('HYPERLINK("') == 0
+                        ? val.f.split('"')[1] ?? undefined
+                        : undefined),
                 comment: val.c?.[0].t,
             };
             if (hdr[C] != null) {
