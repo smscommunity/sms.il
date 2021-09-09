@@ -3,5 +3,6 @@ export default interface ILData {
     playerName: string;
     time: number;
     link: string;
+    rank: number;
     comment?: string;
 }

@@ -7,7 +7,7 @@ import LevelData from '../types/LevelData';
 import styles from '../styles/index.module.css';
 
 interface ILPageProps {
-    ilData: ILData[];
+    ilData: ILData[][];
     levelData: LevelData[];
 }
 
@@ -35,23 +35,15 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         });
     }
 
-    let filteredIls: (ILData & { rank: number })[] = [];
+    let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
 
     if (selectedWorld != 'none' && selectedIL != -1) {
         selectedILData = levelData[selectedIL];
-        const filteredAndSorted = ilData
-            .filter(value => value.ilId == selectedIL)
-            .sort((a, b) => (selectedILData!.isReverse ? b.time - a.time : a.time - b.time));
-        let rank = 0;
-        filteredIls = filteredAndSorted.map((value, index) => {
-            return {
-                ...value,
-                rank: index > 0 && filteredAndSorted[index - 1].time == value.time ? rank : ++rank,
-            };
-        });
+        filteredIls = ilData[selectedIL];
     } else {
         selectedILData = undefined;
+        filteredIls = [];
     }
     return (
         <div className={styles.indexContainer}>

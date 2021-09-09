@@ -20,6 +20,11 @@
 .ilRow .comments {
     max-width: 50%;
     overflow-wrap: anywhere;
+    font-size: 14px;
+}
+
+.ilRow .comments a {
+    text-decoration-line: underline;
 }
 
 .ilFirst {
