@@ -5,14 +5,18 @@ import loadILXls from '../scripts/loadILXls';
 import ILData from '../types/ILData';
 import LevelData from '../types/LevelData';
 import styles from '../styles/index.module.css';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 interface ILPageProps {
     ilData: ILData[][];
     levelData: LevelData[];
+    timestamp: number;
 }
 
 const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
-    const { ilData, levelData } = props;
+    const { ilData, levelData, timestamp } = props;
+    const dateStamp = new Date(timestamp);
     const primarySelect = [...new Set(levelData.filter(data => !!data).map(data => data.world))];
     const [selectedWorld, setSelectedWorld] = React.useState('none');
     const [selectedIL, setSelectedIL] = React.useState(-1);
@@ -96,7 +100,17 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
                 ) : undefined}
             </div>
             <footer className={styles.ilFooter}>
-                Created with 🌞 by Lego | <a href="https://github.com/Lego6245/sms.il">Github</a> |{' '}
+                Created with 🌞 by Lego |{' '}
+                <Tippy content={'This website updates approximately every 15 minutes.'}>
+                    <span
+                        style={{
+                            padding: '0 4px',
+                        }}>
+                        {' '}
+                        Last Updated: {dateStamp.toLocaleString()}
+                    </span>
+                </Tippy>{' '}
+                | <a href="https://github.com/Lego6245/sms.il">Github</a> |{' '}
                 <a href="https://sunmar.io/il">Main Sheet</a>
             </footer>
         </div>
@@ -107,9 +121,11 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async context => {
     const data = loadILXls();
+    const timestamp = Date.now();
     return {
         props: {
             ...data,
+            timestamp: timestamp,
         },
     };
 };

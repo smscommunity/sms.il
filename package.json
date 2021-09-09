@@ -10,6 +10,7 @@
         "export": "next export"
     },
     "dependencies": {
+        "@tippyjs/react": "^4.2.5",
         "linkifyjs": "^3.0.0-beta.3",
         "next": "11.1.2",
         "node-xlsx": "^0.17.1",
