@@ -4,13 +4,16 @@ import styles from '../styles/FilterControl.module.css';
 
 export interface FilterControlProps {
     selectedIL: number;
+    controlledSelectedWorld?: [string, (s: string) => void];
     levelData: LevelData[];
     onSelectedILChange: (newValue: number) => void;
 }
 
 export default function FilterControl(props: FilterControlProps) {
-    const { selectedIL, levelData } = props;
-    const [selectedWorld, setSelectedWorld] = React.useState('none');
+    const { selectedIL, levelData, controlledSelectedWorld } = props;
+    const [selectedWorld, setSelectedWorld] = !!controlledSelectedWorld
+        ? controlledSelectedWorld
+        : React.useState('none');
     const primarySelect = [...new Set(levelData.filter(data => !!data).map(data => data.world))];
     const onWorldChanged = React.useCallback((cb: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedWorld(cb.currentTarget.value);
@@ -22,7 +25,7 @@ export default function FilterControl(props: FilterControlProps) {
 
     const filteredEpisodes: LevelData[] = [];
     if (selectedWorld != 'none') {
-        levelData.forEach((data, index) => {
+        levelData.forEach(data => {
             if (data?.world == selectedWorld) {
                 filteredEpisodes.push(data);
             }

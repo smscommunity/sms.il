@@ -16,10 +16,15 @@ export interface PlayerPageProps {
 export default function PlayerPage(props: PlayerPageProps) {
     const { playerData, playerIls, timestamp } = props;
     const [selectedIL, setSelectedIL] = React.useState(-1);
+    const controlledSelectedWorld = React.useState('none');
+    const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
     let selectedIlData = [];
-    if (selectedIL != -1) {
-        selectedIlData = playerIls.filter(il => il.ilData.id == selectedIL);
+    if (selectedWorld != 'none' || selectedIL != -1) {
+        console.log(selectedWorld);
+        selectedIlData = playerIls.filter(il =>
+            selectedIL != -1 ? il.ilData.id == selectedIL : il.ilData.world == selectedWorld
+        );
     } else {
         selectedIlData = playerIls;
     }
@@ -27,6 +32,7 @@ export default function PlayerPage(props: PlayerPageProps) {
         <div>
             <FilterHeader
                 selectedIL={selectedIL}
+                controlledSelectedWorld={controlledSelectedWorld}
                 levelData={levelData}
                 onSelectedILChange={setSelectedIL}
                 headerText={
