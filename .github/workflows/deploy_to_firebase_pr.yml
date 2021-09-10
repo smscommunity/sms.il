@@ -1,0 +1,20 @@
+name: Deploy to Firebase PR
+on:
+  workflow_run:
+    workflows: ["PR Build"]
+    types:
+      - completed
+jobs:
+  upload_preview:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/download-artifact@v2.0.10
+        with:
+          name: builtOutput
+          path: out
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SMS_IL_PRS }}'
+          projectId: sms-il-prs
