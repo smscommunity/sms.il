@@ -47,8 +47,8 @@ export default function PlayerPage(props: PlayerPageProps) {
             <ILTable
                 ils={selectedIlData}
                 isPlayerTable
-                showEpisode={selectedWorld == 'none'}
-                showWorld={selectedIL == -1}
+                showEpisode={selectedIL == -1}
+                showWorld={selectedWorld == 'none'}
             />
             <Footer dateStamp={new Date(timestamp)} />
         </div>
