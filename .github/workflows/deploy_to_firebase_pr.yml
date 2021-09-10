@@ -28,8 +28,8 @@ jobs:
                archive_format: 'zip',
             });
             var fs = require('fs');
-            fs.writeFileSync('${{github.workspace}}/out/pr.zip', Buffer.from(download.data));
-      - run: unzip out/pr.zip
+            fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
+      - run: unzip pr.zip -d out
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
