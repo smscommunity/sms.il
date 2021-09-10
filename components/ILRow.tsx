@@ -32,7 +32,7 @@ export default function ILRow(props: ILRowProps) {
                 <td className={styles.center}>
                     {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
                 </td>
-                {isPlayerTable && <td>{pointValue}</td>}
+                {isPlayerTable && <td className={styles.center}>{pointValue}</td>}
                 {!isPlayerTable && (
                     <td>
                         <Link href={'/player/' + name}>{name}</Link>
