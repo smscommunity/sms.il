@@ -31,15 +31,29 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/builtOutput.zip', Buffer.from(download.data));
       - run: unzip builtOutput.zip -d out
-      - name: Read file contents
-        id: read_file
+      - name: Read PR Number
+        id: read_number
         uses: andstor/file-reader-action@v1
         with:
-          path: "out/deployName"
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+          path: "out/prNumber"
+      - name: Read PR Label
+        id: read_label
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "out/deployLabel"
+      - name: Deploy to Firebase
+        id: firebase_result
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SMS_IL_PRS }}'
           projectId: sms-il-prs
-          channelId: ${ steps.read_file.outputs.contents }
+          channelId: "${{ steps.read_number.outputs.contents }}--${{ steps.read_label.outputs.contents }}"
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue_number: ${{ steps.read_number.outputs.contents }}
+          body: |
+            Your PR's code has been deployed to the following URL:
+            ${{ steps.firebase_result.outputs.urls }}
           
