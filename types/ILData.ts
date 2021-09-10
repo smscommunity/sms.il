@@ -8,4 +8,5 @@ export default interface ILData {
     link: string;
     rank: number;
     comment?: string;
+    pointValue: number;
 }

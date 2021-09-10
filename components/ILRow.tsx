@@ -8,12 +8,12 @@ export interface ILRowProps {
     data: ILData;
     showWorld?: boolean;
     showEpisode?: boolean;
-    hidePlayer?: boolean;
+    isPlayerTable?: boolean;
 }
 
 export default function ILRow(props: ILRowProps) {
-    const { data, showWorld, showEpisode, hidePlayer } = props;
-    const { playerData, time, link, comment, rank } = data;
+    const { data, showWorld, showEpisode, isPlayerTable } = props;
+    const { playerData, time, link, comment, rank, pointValue } = data;
     const { name } = playerData;
     return (
         <>
@@ -32,7 +32,8 @@ export default function ILRow(props: ILRowProps) {
                 <td className={styles.center}>
                     {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
                 </td>
-                {!hidePlayer && (
+                {isPlayerTable && <td>{pointValue}</td>}
+                {!isPlayerTable && (
                     <td>
                         <Link href={'/player/' + name}>{name}</Link>
                     </td>
