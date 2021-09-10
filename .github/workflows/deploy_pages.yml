@@ -1,31 +1,22 @@
-# This is a basic workflow to help you get started with Actions
+name: Build & Deploy
 
-name: CI
-
-# Controls when the action will run.
 on:
     push:
-        branches: # triggers on any push to master
+        branches:
             - main
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    # This workflow contains a single job called "build"
     build:
-        # The type of runner that the job will run on
         runs-on: ubuntu-latest
-
-        # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
-            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2-beta
-              with:
-                node-version: '12'
             - uses: actions/cache@v2
               with:
                 path: ${{ github.workspace }}/.next/cache
-                key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+                # Generate a new cache whenever packages or source files change.
+                key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]sx?') }}
+                # If source files changed but packages didn't, rebuild from a prior cache.
+                restore-keys: |
+                  ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
             - name: Cache + Install
               uses: bahmutov/npm-install@v1
             - name: Test
