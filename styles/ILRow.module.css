@@ -53,3 +53,10 @@
 .medalHolder > span {
     width: 33%;
 }
+
+@media screen and (max-width: 1024px) {
+    .medalHolder > span {
+        width: 33%;
+        text-align: center;
+    }
+}
