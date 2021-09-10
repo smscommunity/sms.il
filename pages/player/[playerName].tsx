@@ -44,7 +44,12 @@ export default function PlayerPage(props: PlayerPageProps) {
                     ' points)'
                 }
             />
-            <ILTable ils={selectedIlData} hidePlayer showEpisode showWorld />
+            <ILTable
+                ils={selectedIlData}
+                isPlayerTable
+                showEpisode={selectedWorld == 'none'}
+                showWorld={selectedIL == -1}
+            />
             <Footer dateStamp={new Date(timestamp)} />
         </div>
     );
@@ -67,7 +72,13 @@ export const getStaticProps: GetStaticProps = async context => {
     const data = loadILXls();
     const playerName = context.params!.playerName as string;
     const playerIls = data.playerToIlMap.get(playerName);
-    playerIls?.sort((a, b) => (a.rank - b.rank != 0 ? a.rank - b.rank : a.ilData.id - b.ilData.id));
+    playerIls?.sort((a, b) =>
+        b.pointValue - a.pointValue != 0
+            ? b.pointValue - a.pointValue
+            : a.rank - b.rank != 0
+            ? a.rank - b.rank
+            : a.ilData.id - b.ilData.id
+    );
     const playerData = data.playerData.find(entry => entry.name == playerName);
     const timestamp = Date.now();
     return {

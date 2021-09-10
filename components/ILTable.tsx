@@ -6,11 +6,11 @@ export interface ILTableProps {
     ils: ILData[];
     showWorld?: boolean;
     showEpisode?: boolean;
-    hidePlayer?: boolean;
+    isPlayerTable?: boolean;
 }
 
 export default function ILTable(props: ILTableProps) {
-    const { ils, showWorld, showEpisode, hidePlayer } = props;
+    const { ils, showWorld, showEpisode, isPlayerTable } = props;
     return (
         <div
             style={{
@@ -20,7 +20,8 @@ export default function ILTable(props: ILTableProps) {
                 <thead className={styles.ilTableHeader}>
                     <tr>
                         <th>Rank</th>
-                        {!hidePlayer && <th>Player</th>}
+                        {isPlayerTable && <th>Points</th>}
+                        {!isPlayerTable && <th>Player</th>}
                         {showWorld && <th>World</th>}
                         {showEpisode && <th>Episode</th>}
                         <th>Time</th>
@@ -36,7 +37,7 @@ export default function ILTable(props: ILTableProps) {
                                 data={il}
                                 showWorld={showWorld}
                                 showEpisode={showEpisode}
-                                hidePlayer={hidePlayer}
+                                isPlayerTable={isPlayerTable}
                             />
                         ))}
                 </tbody>

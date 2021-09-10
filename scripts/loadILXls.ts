@@ -23,7 +23,7 @@ export default function () {
 
     const playerData: PlayerData[] = [];
     const playerToIlMap: Map<string, ILData[]> = new Map<string, ILData[]>();
-    const unsortedData: Omit<ILData, 'rank'>[][] = new Array(levelData.length + 7);
+    const unsortedData: Omit<ILData, 'rank' | 'pointValue'>[][] = new Array(levelData.length + 7);
     // Index 0: Name
     // Index 1: Points
     // Index 2-4: Medals
@@ -56,7 +56,7 @@ export default function () {
             const ils = element.slice(7);
             ils.forEach((submission, index) => {
                 if (!!submission && !!submission.time) {
-                    const newData: Omit<ILData, 'rank'> = {
+                    const newData: Omit<ILData, 'rank' | 'pointValue'> = {
                         ilData: levelData[index]!,
                         playerData: playerEntry,
                         time: parseTime(submission.time),
@@ -78,7 +78,9 @@ export default function () {
         ilList.sort((a, b) => (selectedILData!.isReverse ? b.time - a.time : a.time - b.time));
         let rank = 0;
         let skip = 0;
-        return ilList.map((value, index) => {
+        // there's probably a better way to do this without iterating twice
+        // but this is technically O(n) so eat me.
+        let rankedList: Omit<ILData, 'pointValue'>[] = ilList.map((value, index) => {
             if (index > 0 && ilList[index - 1].time == value.time) {
                 skip++;
             } else {
@@ -89,15 +91,34 @@ export default function () {
                 ...value,
                 rank,
             };
-
-            if (playerToIlMap.has(newData.playerData.name)) {
-                playerToIlMap.get(newData.playerData.name)?.push(newData);
-            } else {
-                playerToIlMap.set(newData.playerData.name, [newData]);
-            }
-
             return newData;
         });
+
+        let points = 0;
+        skip = 0;
+        rankedList.reverse();
+        return rankedList
+            .map((val, index) => {
+                if (index > 0 && val.time == rankedList[index - 1].time) {
+                    skip++;
+                } else {
+                    points = points + skip + 1;
+                    skip = 0;
+                }
+                const newData = {
+                    ...val,
+                    pointValue: points,
+                };
+
+                if (playerToIlMap.has(newData.playerData.name)) {
+                    playerToIlMap.get(newData.playerData.name)?.push(newData);
+                } else {
+                    playerToIlMap.set(newData.playerData.name, [newData]);
+                }
+
+                return newData;
+            })
+            .reverse();
     });
 
     return {
