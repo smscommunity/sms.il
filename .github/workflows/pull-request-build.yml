@@ -24,7 +24,7 @@ jobs:
           npm run export
           touch out/.nojekyll
       - name: Touch file to store deploy label.
-        run: echo "${{ github.event.pull_request_head.label }}" > ./out/deployLabel
+        run: echo "${{ github.event.pull_request_head.ref }}" > ./out/deployRef
       - name: Touch file to store PR number.
         run: echo "${{ github.event.number }}" > ./out/prNumber
       - uses: actions/upload-artifact@v2.2.4
