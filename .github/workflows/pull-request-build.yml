@@ -13,16 +13,15 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: build
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: export
-      - run: |
+      - name: Cache + Install
+        uses: bahmutov/npm-install@v1
+      - name: Test
+        run: npm run test --if-present
+      - name: Build
+        run: npm run build --if-present
+      - name: Export
+        run: |
+          npm run export
           touch out/.nojekyll
       - run: echo ${{ github.event }}
       - run: echo "${{ github.event.number }}--${{ github.event.head.label }}" > ./out/deployName
