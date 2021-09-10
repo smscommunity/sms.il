@@ -31,8 +31,15 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/builtOutput.zip', Buffer.from(download.data));
       - run: unzip builtOutput.zip -d out
+      - name: Read file contents
+        id: read_file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "out/deployName"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SMS_IL_PRS }}'
           projectId: sms-il-prs
+          channelId: ${ steps.read_file.outputs.contents }
+          
