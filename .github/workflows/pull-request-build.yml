@@ -6,6 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm i && npm run build && npm run export && touch out/.nojekyll
+      - run: echo ${{ github.event.head }}
       - run: echo "${{ github.event.number }}--${{ github.event.head.label }}" > ./out/deployName
       - uses: actions/upload-artifact@v2.2.4
         with:
