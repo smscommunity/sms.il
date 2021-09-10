@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
 import React from 'react';
 import FilterHeader from '../../components/FilterHeader';
 import Footer from '../../components/Footer';
@@ -30,6 +31,9 @@ export default function PlayerPage(props: PlayerPageProps) {
     }
     return (
         <div>
+            <Head>
+                <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
+            </Head>
             <FilterHeader
                 selectedIL={selectedIL}
                 controlledSelectedWorld={controlledSelectedWorld}
