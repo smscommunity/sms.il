@@ -1,6 +1,6 @@
 # Shamelessly borrowed + modified from speculative/hodllive
 
-name: Grab Current Schedule Data
+name: Grab Current IL State
 on:
   workflow_dispatch:
   schedule:
@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: poetry install
       
-      - name: Do the subscriber count update
+      - name: Fetch the IL spreadsheet
         shell: bash
         env:
           SHEET_ID: ${{ secrets.SHEET_ID }}
