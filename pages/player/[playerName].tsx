@@ -7,11 +7,28 @@ import ILTable from '../../components/ILTable';
 import loadILXls from '../../scripts/loadILXls';
 import ILData from '../../types/ILData';
 import PlayerData from '../../types/PlayerData';
+import SortControl from '../../components/SortControl';
 
 export interface PlayerPageProps {
     playerData: PlayerData;
     playerIls: ILData[];
     timestamp: number;
+}
+
+function sortByPoints(a: ILData, b: ILData) {
+    return b.pointValue - a.pointValue != 0
+        ? b.pointValue - a.pointValue
+        : a.rank - b.rank != 0
+        ? a.rank - b.rank
+        : a.ilData.id - b.ilData.id
+}
+
+function sortByRank(a: ILData, b: ILData) {
+    return a.rank - b.rank != 0
+        ? a.rank - b.rank
+        : b.pointValue - a.pointValue != 0
+        ? b.pointValue - a.pointValue
+        : a.ilData.id - b.ilData.id
 }
 
 export default function PlayerPage(props: PlayerPageProps) {
@@ -20,6 +37,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
+    const [selectedSort, setSelectedSort] = React.useState(0);
+    const sortFunctions = [sortByPoints, sortByRank]
     let selectedIlData = [];
     if (selectedWorld != 'none' || selectedIL != -1) {
         console.log(selectedWorld);
@@ -29,6 +48,7 @@ export default function PlayerPage(props: PlayerPageProps) {
     } else {
         selectedIlData = playerIls;
     }
+    selectedIlData.sort(sortFunctions[selectedSort])
     return (
         <div>
             <Head>
@@ -47,6 +67,9 @@ export default function PlayerPage(props: PlayerPageProps) {
                     playerData.points +
                     ' points)'
                 }
+            />
+            <SortControl
+                onSelectedSortChange={setSelectedSort}
             />
             <ILTable
                 ils={selectedIlData}
@@ -76,13 +99,6 @@ export const getStaticProps: GetStaticProps = async context => {
     const data = loadILXls();
     const playerName = context.params!.playerName as string;
     const playerIls = data.playerToIlMap.get(playerName);
-    playerIls?.sort((a, b) =>
-        b.pointValue - a.pointValue != 0
-            ? b.pointValue - a.pointValue
-            : a.rank - b.rank != 0
-            ? a.rank - b.rank
-            : a.ilData.id - b.ilData.id
-    );
     const playerData = data.playerData.find(entry => entry.name == playerName);
     const timestamp = Date.now();
     return {
