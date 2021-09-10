@@ -13,3 +13,4 @@ jobs:
         with:
           name: builtOutput
           path: out
+          retention-days: 1
