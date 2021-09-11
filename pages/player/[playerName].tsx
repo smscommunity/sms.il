@@ -74,7 +74,7 @@ export default function PlayerPage(props: PlayerPageProps) {
             <SortControl
                 selectedSort={selectedSort}
                 sortOptions={[ ...sortFunctions.keys() ]}
-                onSelectedSortChange={setSelectedSort}
+                onSelectedSortChangeInternal={setSelectedSort}
             />
             <ILTable
                 ils={selectedIlData}
