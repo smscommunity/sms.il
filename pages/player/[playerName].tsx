@@ -37,8 +37,11 @@ export default function PlayerPage(props: PlayerPageProps) {
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
-    const [selectedSort, setSelectedSort] = React.useState(0);
-    const sortFunctions = [sortByPoints, sortByRank]
+    const [selectedSort, setSelectedSort] = React.useState("Points");
+    const sortFunctions = new Map([
+        ["Points", sortByPoints],
+        ["Rank", sortByRank]
+    ])
     let selectedIlData = [];
     if (selectedWorld != 'none' || selectedIL != -1) {
         console.log(selectedWorld);
@@ -48,7 +51,7 @@ export default function PlayerPage(props: PlayerPageProps) {
     } else {
         selectedIlData = playerIls;
     }
-    selectedIlData.sort(sortFunctions[selectedSort])
+    selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
         <div>
             <Head>
@@ -69,6 +72,8 @@ export default function PlayerPage(props: PlayerPageProps) {
                 }
             />
             <SortControl
+                selectedSort={selectedSort}
+                sortOptions={[ ...sortFunctions.keys() ]}
                 onSelectedSortChange={setSelectedSort}
             />
             <ILTable

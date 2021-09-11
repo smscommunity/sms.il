@@ -2,13 +2,16 @@ import React from 'react';
 import styles from '../styles/SortControl.module.css';
 
 export interface SortControlProps {
-    onSelectedSortChange: (newValue: number) => void;
+    selectedSort: string;
+    sortOptions: string[];
+    onSelectedSortChange: (newValue: string) => void;
 }
 
 export default function SortControl(props: SortControlProps) {
+    const { selectedSort, sortOptions } = props;
     const onSelectedSortChange = React.useCallback(
         (cb: React.ChangeEvent<HTMLSelectElement>) => {
-            props.onSelectedSortChange(parseInt(cb.currentTarget.value));
+            props.onSelectedSortChange(cb.currentTarget.value);
         },
         [props.onSelectedSortChange]
     );
@@ -18,8 +21,13 @@ export default function SortControl(props: SortControlProps) {
             <div className={styles.sortSelector}>
                 <label htmlFor="sort-select">Sort By</label>
                 <select name="sort" id="sort-select" onChange={onSelectedSortChange}>
-                    <option value="0" key="points">Points</option>
-                    <option value="1" key="rank">Rank</option>
+                    {sortOptions.map(sort => {
+                        return (
+                            <option key={sort} value={sort}>
+                                {sort}
+                            </option>
+                        );
+                    })}
                 </select>
             </div>
         </>
