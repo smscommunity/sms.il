@@ -10,7 +10,20 @@ interface RawSheetData {
     comment: string;
 }
 
-export default function () {
+interface LoadedData {
+    levelData: (LevelData | null)[];
+    playerData: PlayerData[];
+    ilData: ILData[][];
+    playerToIlMap: Map<string, ILData[]>;
+}
+
+let cachedReadData: LoadedData | undefined = undefined;
+
+export default function (): LoadedData {
+    if (!!cachedReadData) {
+        return cachedReadData;
+    }
+
     const worksheets = xlsx.readFile(path.resolve('./data', 'ilsheet.xlsx'));
 
     const ilSheet = worksheets.Sheets['ILs'];
@@ -121,12 +134,14 @@ export default function () {
             .reverse();
     });
 
-    return {
+    cachedReadData = {
         levelData,
         playerData,
         ilData,
         playerToIlMap,
     };
+
+    return cachedReadData;
 }
 
 function parseTime(time: string): number {

@@ -52,8 +52,8 @@ jobs:
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue_number: ${{ steps.read_number.outputs.contents }}
+          issue-number: ${{ steps.read_number.outputs.contents }}
           body: |
             Your PR's code has been deployed to the following URL:
-            ${{ steps.firebase_result.outputs.urls }}
+            [${{ steps.firebase_result.outputs.details_url }}](${{ steps.firebase_result.outputs.details_url }})
           
