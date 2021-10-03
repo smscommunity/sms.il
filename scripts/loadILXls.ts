@@ -32,7 +32,7 @@ export default function (): LoadedData {
 
     const levelData = buildHeadersFromRowObjects(rowObjects);
 
-    const sheetJson = sheet_to_json(ilSheet, { header: 1, range: 3 });
+    const sheetJson = sheet_to_json(ilSheet, { header: 1, range: 4 });
 
     const playerData: PlayerData[] = [];
     const playerToIlMap: Map<string, ILData[]> = new Map<string, ILData[]>();
