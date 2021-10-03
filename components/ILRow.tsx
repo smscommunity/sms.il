@@ -46,7 +46,15 @@ export default function ILRow(props: ILRowProps) {
                     </td>
                 )}
                 <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
-                <td className={styles.center}>{!!link ? <a href={link}>✅</a> : '❌'}</td>
+                <td className={styles.center}>
+                    {!!link ? (
+                        <a href={link} rel={'noreferrer'} target={'_blank'}>
+                            ✅
+                        </a>
+                    ) : (
+                        '❌'
+                    )}
+                </td>
                 <td className={styles.comments}>
                     <Linkify>{comment}</Linkify>
                 </td>
