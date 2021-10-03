@@ -48,7 +48,7 @@ export default function ILRow(props: ILRowProps) {
                 <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
                 <td className={styles.center}>
                     {!!link ? (
-                        <a href={link} target={'_blank'}>
+                        <a href={link} rel={'noreferrer'} target={'_blank'}>
                             ✅
                         </a>
                     ) : (
