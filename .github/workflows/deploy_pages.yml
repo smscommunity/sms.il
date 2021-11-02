@@ -32,6 +32,6 @@ jobs:
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_dir: ./out
-                cname: il.sms.bingo
+                cname: ilview.sunmar.io
                 user_name: 'John IL'
                 user_email: 'saveeveryframe@github.com'
