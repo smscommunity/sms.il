@@ -22,6 +22,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const { ilData, levelData, playerData, timestamp } = props;
     const dateStamp = new Date(timestamp);
     const [selectedIL, setSelectedIL] = React.useState(-1);
+    const [hideAnon, setHideAnon] = React.useState(true);
 
     let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
@@ -32,6 +33,37 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     } else {
         selectedILData = undefined;
         filteredIls = [];
+    }
+
+    let filteredPlayerData = playerData;
+    let filteredIlData = filteredIls;
+
+    if (hideAnon) {
+        if (filteredIls.length > 0) {
+            filteredIlData = [];
+            let ilRank = 1;
+            filteredIls.forEach(val => {
+                if (val.playerData.name.indexOf('Anonymous ') != 0) {
+                    const clonedVal = { ...val };
+                    clonedVal.rank = ilRank;
+                    filteredIlData.push(clonedVal);
+                    ilRank++;
+                }
+            });
+        }
+
+        if (playerData.length > 0) {
+            filteredPlayerData = [];
+            let rank = 1;
+            playerData.forEach(val => {
+                if (val.name.indexOf('Anonymous ') != 0) {
+                    const clonedVal = { ...val };
+                    clonedVal.rank = rank;
+                    filteredPlayerData.push(clonedVal);
+                    rank++;
+                }
+            });
+        }
     }
     const headerText = !!selectedILData
         ? selectedILData.world +
@@ -46,15 +78,17 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
             </Head>
             <FilterHeader
                 selectedIL={selectedIL}
+                hideAnon={hideAnon}
+                onHideAnonClicked={setHideAnon}
                 levelData={levelData}
                 onSelectedILChange={setSelectedIL}
                 headerText={headerText}
             />
             <div>
-                {filteredIls.length > 0 ? (
-                    <ILTable ils={filteredIls} />
+                {filteredIlData.length > 0 ? (
+                    <ILTable ils={filteredIlData} />
                 ) : (
-                    <PlayerTable players={playerData} />
+                    <PlayerTable players={filteredPlayerData} />
                 )}
             </div>
             <Footer dateStamp={dateStamp} />

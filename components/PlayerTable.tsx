@@ -16,10 +16,10 @@ export default function PlayerTable(props: PlayerTableProps) {
             <table className={styles.playerTable}>
                 <thead className={styles.playerTableHeader}>
                     <tr>
-                        <th>Rank</th>
-                        <th>Player</th>
-                        <th>Points</th>
-                        <th>Medals</th>
+                        <th className={styles.rankPointsRowWidth}>Rank</th>
+                        <th className={styles.playerRowWidth}>Player</th>
+                        <th className={styles.rankPointsRowWidth}>Points</th>
+                        <th className={styles.medalWidth}>Medals</th>
                     </tr>
                 </thead>
                 <tbody>

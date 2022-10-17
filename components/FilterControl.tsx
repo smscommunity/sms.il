@@ -7,10 +7,12 @@ export interface FilterControlProps {
     controlledSelectedWorld?: [string, (s: string) => void];
     levelData: LevelData[];
     onSelectedILChange: (newValue: number) => void;
+    hideAnon?: boolean;
+    onHideAnonClicked?: (newValue: boolean) => void;
 }
 
 export default function FilterControl(props: FilterControlProps) {
-    const { selectedIL, levelData, controlledSelectedWorld } = props;
+    const { selectedIL, hideAnon, levelData, controlledSelectedWorld } = props;
     const tempSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = !!controlledSelectedWorld
         ? controlledSelectedWorld
@@ -29,6 +31,15 @@ export default function FilterControl(props: FilterControlProps) {
         },
         [props.onSelectedILChange]
     );
+
+    const onHideAnonClicked = props.onHideAnonClicked
+        ? React.useCallback(
+              (cb: React.ChangeEvent<HTMLInputElement>) => {
+                  props.onHideAnonClicked!(cb.currentTarget.checked);
+              },
+              [props.onHideAnonClicked]
+          )
+        : undefined;
 
     const filteredEpisodes: LevelData[] = [];
     if (selectedWorld != 'none') {
@@ -70,6 +81,18 @@ export default function FilterControl(props: FilterControlProps) {
                         );
                     })}
                 </select>
+                {!!props.onHideAnonClicked && (
+                    <div>
+                        <label htmlFor="hide-anon">Hide Anonymous Players</label>{' '}
+                        <input
+                            id="hide-anon"
+                            type="checkbox"
+                            checked={hideAnon}
+                            className={styles.hideAnonMargin}
+                            onChange={onHideAnonClicked}
+                        />
+                    </div>
+                )}
             </div>
         </>
     );

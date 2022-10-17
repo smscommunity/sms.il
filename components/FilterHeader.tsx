@@ -9,15 +9,26 @@ export interface FilterHeaderProps {
     levelData: LevelData[];
     onSelectedILChange: (newValue: number) => void;
     headerText: string;
+    hideAnon?: boolean;
+    onHideAnonClicked?: (newValue: boolean) => void;
 }
 
 export default function FilterHeader(props: FilterHeaderProps) {
-    const { selectedIL, onSelectedILChange, levelData, headerText, controlledSelectedWorld } =
-        props;
+    const {
+        selectedIL,
+        onSelectedILChange,
+        levelData,
+        headerText,
+        controlledSelectedWorld,
+        hideAnon,
+        onHideAnonClicked,
+    } = props;
     return (
         <header className={styles.ilHeader}>
             <FilterControl
                 selectedIL={selectedIL}
+                hideAnon={hideAnon}
+                onHideAnonClicked={onHideAnonClicked}
                 controlledSelectedWorld={controlledSelectedWorld}
                 onSelectedILChange={onSelectedILChange}
                 levelData={levelData}

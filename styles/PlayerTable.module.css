@@ -19,3 +19,15 @@
 .playerTable tr:nth-child(even) {
     background-color: rgb(25, 25, 73);
 }
+
+.playerTable .rankPointsRowWidth {
+    width: 100px;
+}
+
+.playerTable .playerRowWidth {
+    max-width: 300px;
+}
+
+.playerTable .medalWidth {
+    width: 300px;
+}
