@@ -68,6 +68,8 @@ export default function (): LoadedData {
             playerData.push(playerEntry);
             const ils = element.slice(7);
             ils.forEach((submission, index) => {
+                if (!levelData[index]) return;
+                
                 if (!!submission && !!submission.time) {
                     const newData: Omit<ILData, 'rank' | 'pointValue'> = {
                         ilData: levelData[index]!,
