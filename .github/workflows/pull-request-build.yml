@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4.2.0
         with:
           path: ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
@@ -27,7 +27,7 @@ jobs:
         run: echo "${{ github.event.pull_request.head.label }}" > ./out/deployLabel
       - name: Touch file to store PR number.
         run: echo "${{ github.event.number }}" > ./out/prNumber
-      - uses: actions/upload-artifact@v2.2.4
+      - uses: actions/upload-artifact@v4
         with:
           name: builtOutput
           path: out
