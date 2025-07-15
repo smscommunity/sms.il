@@ -31,14 +31,44 @@ function sortByRank(a: ILData, b: ILData) {
         : a.ilData.id - b.ilData.id
 }
 
+const worldOrder = [
+    "Delfino Plaza",
+    "Bianco Hills", 
+    "Ricco Harbor",
+    "Gelato Beach",
+    "Pinna Park",
+    "Sirena Beach",
+    "Noki Bay",
+    "Pianta Village"
+];
+
+function sortByWorld(a: ILData, b: ILData) {
+    const worldA = worldOrder.indexOf(a.ilData.world);
+    const worldB = worldOrder.indexOf(b.ilData.world);
+    
+    if (worldA !== worldB) {
+        return worldA - worldB;
+    }
+    
+    const episodeA = Number(a.ilData.episode) || 0;
+    const episodeB = Number(b.ilData.episode) || 0;
+    
+    if (episodeA !== episodeB) {
+        return episodeA - episodeB;
+    }
+    
+    return a.ilData.id - b.ilData.id;
+}
+
 export default function PlayerPage(props: PlayerPageProps) {
     const { playerData, playerIls, timestamp } = props;
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
-    const [selectedSort, setSelectedSort] = React.useState("Points");
+    const [selectedSort, setSelectedSort] = React.useState("World");
     const sortFunctions = new Map([
+        ["World", sortByWorld],
         ["Points", sortByPoints],
         ["Rank", sortByRank]
     ])
