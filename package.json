@@ -4,10 +4,10 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "NODE_OPTIONS='--openssl-legacy-provider' next build",
+        "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "export": "NODE_OPTIONS='--openssl-legacy-provider' next export"
+        "export": "next export"
     },
     "dependencies": {
         "@tippyjs/react": "^4.2.5",
