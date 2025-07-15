@@ -9,7 +9,7 @@
     font-size: 28px;
     border: 2px solid black;
     padding: 0 8px;
-    background-color: brown;
+    background-color: SlateGrey;
 }
 
 .playerTable tr:nth-child(odd) {
