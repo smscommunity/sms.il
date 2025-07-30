@@ -55,9 +55,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
            <div style={{ position: 'relative' }}>
-    <Link
-        href="/"
-        style={{
+    <Link href="/">
+        <a style={{
         position: 'absolute',
         top: 20,
         left: 20,
@@ -70,7 +69,7 @@ export default function PlayerPage(props: PlayerPageProps) {
         zIndex: 1000,
         }}
       >
-        Home
+        Home</a>
           </Link>
             <Head>
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
