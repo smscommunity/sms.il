@@ -74,8 +74,8 @@ export default function PlayerPage(props: PlayerPageProps) {
             <img src="/spinshine.gif"
           alt="Home"
           style={{
-        width: '48px', 
-        height: '48px',
+        width: '50px', 
+        height: '50px',
         display: 'block',
       }}/>
         </a>
