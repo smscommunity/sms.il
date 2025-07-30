@@ -71,7 +71,7 @@ export default function PlayerPage(props: PlayerPageProps) {
         alignItems: 'center',
         }}
       >
-            <img src="public/spinshine.gif"
+            <img src="/spinshine.gif"
           alt="Home"
           style={{
         width: '48px', 
