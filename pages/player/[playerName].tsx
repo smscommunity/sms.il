@@ -58,8 +58,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     <Link href="/">
         <a style={{
         position: 'absolute',
-        top: 20,
-        left: 20,
+        top: 0,
+        left: 0,
         padding: '0',
         background: 'none',
         color: '#fff',
