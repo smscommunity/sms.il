@@ -60,16 +60,25 @@ export default function PlayerPage(props: PlayerPageProps) {
         position: 'absolute',
         top: 20,
         left: 20,
-        padding: '8px 16px',
-        background: '#1976d2',
+        padding: '0',
+        background: 'none',
         color: '#fff',
         borderRadius: '4px',
         textDecoration: 'none',
         fontWeight: 'bold',
         zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
         }}
       >
-        Home</a>
+            <img src="public/spinshine.gif"
+          alt="Home"
+          style={{
+        width: '48px', 
+        height: '48px',
+        display: 'block',
+      }}/>
+        </a>
           </Link>
             <Head>
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
