@@ -33,8 +33,6 @@ function sortByRank(a: ILData, b: ILData) {
 }
 
 export default function PlayerPage(props: PlayerPageProps) {
-    const [originalIlData] = React.useState(playerIls);
-    const [selectedIlData, setSelectedIlData] = React.useState(playerIls);
     const { playerData, playerIls, timestamp } = props;
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const controlledSelectedWorld = React.useState('none');
