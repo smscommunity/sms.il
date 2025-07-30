@@ -38,8 +38,9 @@ export default function PlayerPage(props: PlayerPageProps) {
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
-    const [selectedSort, setSelectedSort] = React.useState("Points");
+    const [selectedSort, setSelectedSort] = React.useState("Episode");
     const sortFunctions = new Map([
+        ["Episode", () => 0],
         ["Points", sortByPoints],
         ["Rank", sortByRank]
     ])
