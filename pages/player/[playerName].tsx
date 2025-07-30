@@ -54,21 +54,23 @@ export default function PlayerPage(props: PlayerPageProps) {
     }
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
-        <div style={{ position: 'relative' }}>
-          <Link href="/" legacyBehavior>
-            <a
-                style={{
-                position: 'absolute',
-                top: 20,
-                left: 20,
-                padding: '8px 16px',
-                background: '#1976d2',
-                color: '#fff',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                zIndex: 1000,
-              }}>Home</a>
+           <div style={{ position: 'relative' }}>
+    <Link
+        href="/"
+        style={{
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        padding: '8px 16px',
+        background: '#1976d2',
+        color: '#fff',
+        borderRadius: '4px',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        zIndex: 1000,
+        }}
+      >
+        Home
           </Link>
             <Head>
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
