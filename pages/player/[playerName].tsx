@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import React from 'react';
 import FilterHeader from '../../components/FilterHeader';
 import Footer from '../../components/Footer';
@@ -53,7 +54,22 @@ export default function PlayerPage(props: PlayerPageProps) {
     }
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
-        <div>
+        <div style={{ position: 'relative' }}>
+          <Link href="/" legacyBehavior>
+            <a
+                style={{
+                position: 'absolute',
+                top: 20,
+                left: 20,
+                padding: '8px 16px',
+                background: '#1976d2',
+                color: '#fff',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                zIndex: 1000,
+              }}>Home</a>
+          </Link>
             <Head>
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
             </Head>
