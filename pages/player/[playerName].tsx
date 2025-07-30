@@ -82,6 +82,7 @@ export default function PlayerPage(props: PlayerPageProps) {
         </a>
           </Link>
             <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
             </Head>
             <FilterHeader
