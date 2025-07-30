@@ -1,6 +1,6 @@
 .ilHeader {
     position: sticky;
-    top: 0;
+    top: 100;
     display: flex;
     flex-direction: row;
     background-color: rgba(33, 33, 33, 0.66);
