@@ -6,7 +6,7 @@
     right: 0px;
     font-size: 20px;
     padding: 24px;
-    position: absolute;
+    position: fixed;
     background-color: rgba(33, 33, 33, 0.66);
 }
 
