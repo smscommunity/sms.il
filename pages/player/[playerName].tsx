@@ -58,7 +58,7 @@ export default function PlayerPage(props: PlayerPageProps) {
            <div style={{ position: 'relative' }}>
     <Link href="/">
         <a style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 10,
         left: 10,
         padding: '0',
