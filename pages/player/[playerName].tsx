@@ -16,6 +16,10 @@ export interface PlayerPageProps {
     timestamp: number;
 }
 
+function sortByEpisode(a: ILData, b: ILData) {
+    return a.ilData.id - b.ilData.id;
+}
+
 function sortByPoints(a: ILData, b: ILData) {
     return b.pointValue - a.pointValue != 0
         ? b.pointValue - a.pointValue
@@ -40,7 +44,7 @@ export default function PlayerPage(props: PlayerPageProps) {
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
     const [selectedSort, setSelectedSort] = React.useState("Episode");
     const sortFunctions = new Map([
-        ["Episode", () => 0],
+        ["Episode", sortByEpisode],
         ["Points", sortByPoints],
         ["Rank", sortByRank]
     ])
