@@ -66,7 +66,7 @@ return (
     alt="Home"
     width={50}
     height={50}
-    style={{ display: 'block' }}
+    className={styles.blockImg}
     priority
   />
 </a>
