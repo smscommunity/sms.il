@@ -1,5 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import Image from 'next/image';
 import ILTable from '../components/ILTable';
 import loadILXls from '../scripts/loadILXls';
 import ILData from '../types/ILData';
