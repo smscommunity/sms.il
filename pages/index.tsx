@@ -42,24 +42,25 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         : 'Super Mario Sunshine IL Leaderboards';
 return (
   <>
-    <Link href="/">
-      <a style={{
-       position: 'fixed',
-       top: 10,
-       left: 10,
-       padding: '0',
-       background: 'none',
-       color: '#fff',
-       borderRadius: '4px',
-       textDecoration: 'none',
-       fontWeight: 'bold',
-       zIndex: 1000,
-       display: 'flex',
-       alignItems: 'center',
-      }}>
-        <img src="/spinshine.gif" alt="Home" style={{ width: '50px', height: '50px', display: 'block' }}/>
-      </a>
-    </Link>
+<a
+  href="/"
+  style={{
+    position: 'fixed',
+    top: 10,
+    left: 10,
+    padding: '0',
+    background: 'none',
+    color: '#fff',
+    borderRadius: '4px',
+    textDecoration: 'none',
+    fontWeight: 'bold',
+    zIndex: 1000,
+    display: 'flex',
+    alignItems: 'center',
+  }}
+>
+  <img src="/spinshine.gif" alt="Home" style={{ width: '50px', height: '50px', display: 'block' }}/>
+</a>
     <div className={styles.indexContainer}>
       <Head>
         <title>Super Mario Sunshine IL Leaderboard</title>
