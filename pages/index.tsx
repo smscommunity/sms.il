@@ -58,6 +58,7 @@ return (
         display: 'flex',
         alignItems: 'center',
         }}
+       onClick={() => window.location.reload()}
       >
             <img src="/spinshine.gif"
           alt="Home"
