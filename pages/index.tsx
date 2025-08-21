@@ -43,7 +43,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         : 'Super Mario Sunshine IL Leaderboards';
 return (
   <>
-    <Link href="/" legacyBehavior>
+    <Link href="/">
         <a 
         style={{
         position: 'fixed',
