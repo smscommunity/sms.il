@@ -58,8 +58,16 @@ return (
     display: 'flex',
     alignItems: 'center',
   }}
+  // eslint-disable-next-line @next/next/no-html-link-for-pages
 >
-  <img src="/spinshine.gif" alt="Home" style={{ width: '50px', height: '50px', display: 'block' }}/>
+  <Image
+    src="/spinshine.gif"
+    alt="Home"
+    width={50}
+    height={50}
+    style={{ display: 'block' }}
+    priority
+  />
 </a>
     <div className={styles.indexContainer}>
       <Head>
