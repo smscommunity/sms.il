@@ -60,13 +60,13 @@ return (
         alignItems: 'center',
         }}
       >
-            <Image src="/spinshine.gif"
-          alt="Home"
-          style={{
-        width: '50px', 
-        height: '50px',
-        display: 'block',
-      }}/>
+<Image
+  src="/spinshine.gif"
+  alt="Home"
+  width={50}
+  height={50}
+  style={{ display: 'block' }} 
+/>
         </a>
     </Link>
     <div className={styles.indexContainer}>
