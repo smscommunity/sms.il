@@ -40,54 +40,47 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
           selectedILData.episode +
           (!!selectedILData.subCategory ? ' (' + selectedILData.subCategory + ')' : '')
         : 'Super Mario Sunshine IL Leaderboards';
-    return (
+return (
+  <>
     <Link href="/">
-        <a style={{
-        position: 'fixed',
-        top: 10,
-        left: 10,
-        padding: '0',
-        background: 'none',
-        color: '#fff',
-        borderRadius: '4px',
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        }}
-      >
-            <img src="/spinshine.gif"
-          alt="Home"
-          style={{
-        width: '50px', 
-        height: '50px',
-        display: 'block',
-      }}/>
-        </a>
-          </Link>
-            <Head>
-        <div className={styles.indexContainer}>
-            <Head>
-                <title>Super Mario Sunshine IL Leaderboard</title>
-            </Head>
-            <FilterHeader
-                selectedIL={selectedIL}
-                levelData={levelData}
-                onSelectedILChange={setSelectedIL}
-                headerText={headerText}
-            />
-            <div>
-                {filteredIls.length > 0 ? (
-                    <ILTable ils={filteredIls} />
-                ) : (
-                    <PlayerTable players={playerData} />
-                )}
-            </div>
-            <Footer dateStamp={dateStamp} />
-        </div>
-    );
-};
+      <a style={{
+       position: 'fixed',
+       top: 10,
+       left: 10,
+       padding: '0',
+       background: 'none',
+       color: '#fff',
+       borderRadius: '4px',
+       textDecoration: 'none',
+       fontWeight: 'bold',
+       zIndex: 1000,
+       display: 'flex',
+       alignItems: 'center',
+      }}>
+        <img src="/spinshine.gif" alt="Home" style={{ width: '50px', height: '50px', display: 'block' }}/>
+      </a>
+    </Link>
+    <div className={styles.indexContainer}>
+      <Head>
+        <title>Super Mario Sunshine IL Leaderboard</title>
+      </Head>
+      <FilterHeader
+        selectedIL={selectedIL}
+        levelData={levelData}
+        onSelectedILChange={setSelectedIL}
+        headerText={headerText}
+      />
+      <div>
+        {filteredIls.length > 0 ? (
+          <ILTable ils={filteredIls} />
+        ) : (
+          <PlayerTable players={playerData} />
+        )}
+      </div>
+      <Footer dateStamp={dateStamp} />
+    </div>
+  </>
+);
 
 export default Home;
 
