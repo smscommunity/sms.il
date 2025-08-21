@@ -41,7 +41,6 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
           (!!selectedILData.subCategory ? ' (' + selectedILData.subCategory + ')' : '')
         : 'Super Mario Sunshine IL Leaderboards';
     return (
-                   <div style={{ position: 'relative' }}>
     <Link href="/">
         <a style={{
         position: 'fixed',
