@@ -44,8 +44,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
 return (
   <>
     <Link href="/">
-        <a 
-        style={{
+        <a style={{
         position: 'fixed',
         top: 10,
         left: 10,
@@ -60,16 +59,15 @@ return (
         alignItems: 'center',
         }}
       >
-<div style={{ display: 'block' }}>
-<Image
-  src="/spinshine.gif"
-  alt="Home"
-  width={50}
-  height={50}
-/>
-</div>
+            <img src="/spinshine.gif"
+          alt="Home"
+          style={{
+        width: '50px', 
+        height: '50px',
+        display: 'block',
+      }}/>
         </a>
-    </Link>
+          </Link>
     <div className={styles.indexContainer}>
       <Head>
         <title>Super Mario Sunshine IL Leaderboard</title>
