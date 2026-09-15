@@ -41,8 +41,10 @@ export default function ILRow(props: ILRowProps) {
                 {showWorld && <td>{data.ilData.world}</td>}
                 {showEpisode && (
                     <td>
-                        {data.ilData.episode +
-                            (data.ilData.subCategory ? ' // ' + data.ilData.subCategory : '')}
+                        <Link href={'/?il=' + data.ilData.id}>
+                            {data.ilData.episode +
+                                (data.ilData.subCategory ? ' // ' + data.ilData.subCategory : '')}
+                        </Link>
                     </td>
                 )}
                 <td className={styles.center}>{parseMilisecondsToUserTime(time)}</td>
