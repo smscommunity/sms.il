@@ -155,6 +155,18 @@ function parseTime(time: string): number {
     return millis + seconds * 1000 + minutes * 60 * 1000;
 }
 
+// The IL sheet names worlds with their full in-game titles; we display the short form instead.
+const WORLD_SHORT_NAMES: Record<string, string> = {
+    'Bianco Hills': 'Bianco',
+    'Ricco Harbor': 'Ricco',
+    'Gelato Beach / Mamma Beach': 'Gelato',
+    'Pinna Park': 'Pinna',
+    'Sirena Beach': 'Sirena',
+    'Noki Bay / Mare Bay': 'Noki',
+    'Pianta Village / Monte Village': 'Pianta',
+    'Delfino Plaza': 'Delfino',
+};
+
 function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (LevelData | null)[] {
     const primaryHeaders = rowObjects[0];
     const secondaryHeaders = rowObjects[1];
@@ -171,15 +183,16 @@ function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (Leve
         }
         primaryHeader = primaryHeaders[i] ?? primaryHeader;
         secondaryHeader = secondaryHeaders[i] ?? secondaryHeader;
+        const rawWorld = primaryHeader.replace(/[\n\r]/g, '');
         const levelData = {
-            world: primaryHeader.replace(/[\n\r]/g, ''),
+            world: WORLD_SHORT_NAMES[rawWorld] ?? rawWorld,
             episode: secondaryHeader.replace(/[\n\r]/g, ''),
             subCategory: specificHeaders[i]?.replace(/[\n\r]/g, '') ?? null,
             id: i,
         };
         headers.push({
             ...levelData,
-            isReverse: isReverse(levelData),
+            isReverse: isReverse({ ...levelData, world: rawWorld }),
         });
         i++;
     }
