@@ -31,23 +31,9 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const dateStamp = new Date(timestamp);
     const router = useRouter();
     const [selectedIL, setSelectedIL] = React.useState(-1);
-    const [selectedCategory, setSelectedCategoryRaw] = React.useState<string | null>(null);
-    const [selectedWorld, setSelectedWorldRaw] = React.useState('none');
-
-    // World and category are two different ways to slice the same overall standings,
-    // so picking one clears the other rather than trying to intersect them.
-    const setSelectedWorld = (world: string) => {
-        setSelectedWorldRaw(world);
-        setSelectedCategoryRaw(null);
-    };
-    const setSelectedCategory = (category: string | null) => {
-        setSelectedCategoryRaw(category);
-        setSelectedWorldRaw('none');
-    };
-    const controlledSelectedWorld: [string, (world: string) => void] = [
-        selectedWorld,
-        setSelectedWorld,
-    ];
+    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+    const controlledSelectedWorld = React.useState('none');
+    const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
 
     React.useEffect(() => {
         if (!router.query.il) return;
@@ -68,9 +54,23 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         selectedILData = undefined;
         filteredIls = [];
     }
+    const worldAndCategoryPlayerData = React.useMemo(() => {
+        if (selectedWorld == 'none' || !selectedCategory) return null;
+        const categoryLevelIds = new Set(
+            CATEGORIES.find(category => category.key == selectedCategory)?.levelIds
+        );
+        const combinedLevelIds = levelData
+            .filter(level => !!level && level.world == selectedWorld && categoryLevelIds.has(level.id))
+            .map(level => level.id);
+        return buildCategoryStandings(ilData, [
+            { key: 'combined', label: '', levelIds: combinedLevelIds },
+        ]).combined;
+    }, [ilData, levelData, selectedWorld, selectedCategory]);
     const displayedPlayerData =
         selectedIL != -1
             ? playerData
+            : !!worldAndCategoryPlayerData
+            ? worldAndCategoryPlayerData
             : selectedWorld != 'none'
             ? worldPlayerData[selectedWorld] ?? []
             : !!selectedCategory
@@ -81,6 +81,8 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const overallSuffix =
         selectedIL != -1
             ? ''
+            : selectedWorld != 'none' && !!selectedCategoryLabel
+            ? ' - ' + selectedWorld + ' - ' + selectedCategoryLabel
             : selectedWorld != 'none'
             ? ' - ' + selectedWorld
             : !!selectedCategoryLabel
