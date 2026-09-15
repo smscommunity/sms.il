@@ -21,17 +21,33 @@ interface ILPageProps {
     levelData: LevelData[];
     playerData: PlayerData[];
     categoryPlayerData: Record<string, PlayerData[]>;
+    worldPlayerData: Record<string, PlayerData[]>;
     timestamp: number;
 }
 
 const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
-    const { ilData, levelData, playerData, categoryPlayerData, timestamp } = props;
+    const { ilData, levelData, playerData, categoryPlayerData, worldPlayerData, timestamp } =
+        props;
     const dateStamp = new Date(timestamp);
     const router = useRouter();
     const [selectedIL, setSelectedIL] = React.useState(-1);
-    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
-    const controlledSelectedWorld = React.useState('none');
-    const [, setSelectedWorld] = controlledSelectedWorld;
+    const [selectedCategory, setSelectedCategoryRaw] = React.useState<string | null>(null);
+    const [selectedWorld, setSelectedWorldRaw] = React.useState('none');
+
+    // World and category are two different ways to slice the same overall standings,
+    // so picking one clears the other rather than trying to intersect them.
+    const setSelectedWorld = (world: string) => {
+        setSelectedWorldRaw(world);
+        setSelectedCategoryRaw(null);
+    };
+    const setSelectedCategory = (category: string | null) => {
+        setSelectedCategoryRaw(category);
+        setSelectedWorldRaw('none');
+    };
+    const controlledSelectedWorld: [string, (world: string) => void] = [
+        selectedWorld,
+        setSelectedWorld,
+    ];
 
     React.useEffect(() => {
         if (!router.query.il) return;
@@ -53,16 +69,29 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         filteredIls = [];
     }
     const displayedPlayerData =
-        selectedIL == -1 && !!selectedCategory ? categoryPlayerData[selectedCategory] : playerData;
+        selectedIL != -1
+            ? playerData
+            : selectedWorld != 'none'
+            ? worldPlayerData[selectedWorld] ?? []
+            : !!selectedCategory
+            ? categoryPlayerData[selectedCategory]
+            : playerData;
     const selectedCategoryLabel = CATEGORIES.find(category => category.key === selectedCategory)
         ?.label;
+    const overallSuffix =
+        selectedIL != -1
+            ? ''
+            : selectedWorld != 'none'
+            ? ' - ' + selectedWorld
+            : !!selectedCategoryLabel
+            ? ' - ' + selectedCategoryLabel
+            : '';
     const headerText = !!selectedILData
         ? selectedILData.world +
           ' - ' +
           selectedILData.episode +
           (!!selectedILData.subCategory ? ' (' + selectedILData.subCategory + ')' : '')
-        : 'Super Mario Sunshine IL Leaderboards' +
-          (selectedIL == -1 && !!selectedCategoryLabel ? ' - ' + selectedCategoryLabel : '');
+        : 'Super Mario Sunshine IL Leaderboards' + overallSuffix;
 return (
   <>
     <a href="https://ilview.sunmar.io/"
@@ -123,7 +152,15 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async context => {
     const { ilData, levelData, playerData } = loadILXls();
-    const categoryPlayerData = buildCategoryStandings(ilData);
+    const categoryPlayerData = buildCategoryStandings(ilData, CATEGORIES);
+    const namedLevels = levelData.filter((level): level is LevelData => !!level);
+    const worldNames = [...new Set(namedLevels.map(level => level.world))];
+    const worldCategories = worldNames.map(world => ({
+        key: world,
+        label: world,
+        levelIds: namedLevels.filter(level => level.world === world).map(level => level.id),
+    }));
+    const worldPlayerData = buildCategoryStandings(ilData, worldCategories);
     const timestamp = Date.now();
     return {
         props: {
@@ -132,6 +169,7 @@ export const getStaticProps: GetStaticProps = async context => {
             timestamp,
             playerData,
             categoryPlayerData,
+            worldPlayerData,
         },
     };
 };
