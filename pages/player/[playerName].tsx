@@ -43,6 +43,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
+    const submittedCount = playerIls.length;
+    const withVideoCount = playerIls.filter(il => !!il.link).length;
     const [selectedSort, setSelectedSort] = React.useState("Episode");
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
     const sortFunctions = new Map([
@@ -107,7 +109,11 @@ export default function PlayerPage(props: PlayerPageProps) {
                     playerData.rank +
                     ': ' +
                     playerData.points +
-                    ' points)'
+                    ' points) [' +
+                    submittedCount +
+                    '/' +
+                    withVideoCount +
+                    ']'
                 }
             />
             <SortControl
