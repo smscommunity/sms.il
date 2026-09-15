@@ -9,6 +9,8 @@ import loadILXls from '../../scripts/loadILXls';
 import ILData from '../../types/ILData';
 import PlayerData from '../../types/PlayerData';
 import SortControl from '../../components/SortControl';
+import CategorySortControl from '../../components/CategorySortControl';
+import { CATEGORIES } from '../../data/categories';
 
 export interface PlayerPageProps {
     playerData: PlayerData;
@@ -43,6 +45,7 @@ export default function PlayerPage(props: PlayerPageProps) {
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
     const [selectedSort, setSelectedSort] = React.useState("Episode");
+    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
     const sortFunctions = new Map([
         ["Episode", sortByEpisode],
         ["Points", sortByPoints],
@@ -56,6 +59,12 @@ export default function PlayerPage(props: PlayerPageProps) {
         );
     } else {
         selectedIlData = playerIls;
+    }
+    if (selectedCategory) {
+        const categoryLevelIds = new Set(
+            CATEGORIES.find(category => category.key == selectedCategory)?.levelIds
+        );
+        selectedIlData = selectedIlData.filter(il => categoryLevelIds.has(il.ilData.id));
     }
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
@@ -108,6 +117,13 @@ export default function PlayerPage(props: PlayerPageProps) {
                 sortOptions={[ ...sortFunctions.keys() ]}
                 onSelectedSortChangeInternal={setSelectedSort}
             />
+            {selectedIL == -1 && (
+                <CategorySortControl
+                    selectedCategory={selectedCategory}
+                    onSelectedCategoryChange={setSelectedCategory}
+                    style={{ position: 'fixed', top: 230 }}
+                />
+            )}
             <ILTable
                 ils={selectedIlData}
                 isPlayerTable
