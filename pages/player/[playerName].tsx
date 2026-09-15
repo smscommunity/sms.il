@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import React from 'react';
 import FilterHeader from '../../components/FilterHeader';
 import Footer from '../../components/Footer';
@@ -69,8 +68,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
            <div style={{ position: 'relative' }}>
-    <Link href="/">
-        <a style={{
+    <a href="https://ilview.sunmar.io/"
+        style={{
         position: 'fixed',
         top: 10,
         left: 10,
@@ -88,12 +87,11 @@ export default function PlayerPage(props: PlayerPageProps) {
             <img src="/spinshine.gif"
           alt="Home"
           style={{
-        width: '50px', 
+        width: '50px',
         height: '50px',
         display: 'block',
       }}/>
         </a>
-          </Link>
             <Head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
