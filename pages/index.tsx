@@ -1,6 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import ILTable from '../components/ILTable';
 import loadILXls from '../scripts/loadILXls';
 import ILData from '../types/ILData';
@@ -27,8 +28,20 @@ interface ILPageProps {
 const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const { ilData, levelData, playerData, categoryPlayerData, timestamp } = props;
     const dateStamp = new Date(timestamp);
+    const router = useRouter();
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+    const controlledSelectedWorld = React.useState('none');
+    const [, setSelectedWorld] = controlledSelectedWorld;
+
+    React.useEffect(() => {
+        if (!router.query.il) return;
+        const linkedIL = parseInt(router.query.il as string);
+        const linkedILData = levelData[linkedIL - 7];
+        if (!linkedILData) return;
+        setSelectedIL(linkedIL);
+        setSelectedWorld(linkedILData.world);
+    }, [router.query.il]);
 
     let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
@@ -85,6 +98,7 @@ return (
       </Head>
       <FilterHeader
         selectedIL={selectedIL}
+        controlledSelectedWorld={controlledSelectedWorld}
         levelData={levelData}
         onSelectedILChange={setSelectedIL}
         headerText={headerText}
