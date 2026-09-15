@@ -5,12 +5,13 @@ import styles from '../styles/CategorySortControl.module.css';
 export interface CategorySortControlProps {
     selectedCategory: string | null;
     onSelectedCategoryChange: (newValue: string | null) => void;
+    style?: React.CSSProperties;
 }
 
 export default function CategorySortControl(props: CategorySortControlProps) {
-    const { selectedCategory, onSelectedCategoryChange } = props;
+    const { selectedCategory, onSelectedCategoryChange, style } = props;
     return (
-        <div className={styles.categorySelector}>
+        <div className={styles.categorySelector} style={style}>
             <label>Sort By</label>
             <button
                 type="button"
