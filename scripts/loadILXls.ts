@@ -167,6 +167,12 @@ const WORLD_SHORT_NAMES: Record<string, string> = {
     'Delfino Plaza': 'Delfino',
 };
 
+// The IL sheet's sub-category labels are longer than we want displayed.
+const SUB_CATEGORY_SHORT_NAMES: Record<string, string | null> = {
+    'Full Level': null,
+    'Secret Only': 'Secret',
+};
+
 function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (LevelData | null)[] {
     const primaryHeaders = rowObjects[0];
     const secondaryHeaders = rowObjects[1];
@@ -184,10 +190,14 @@ function buildHeadersFromRowObjects(rowObjects: (string | undefined)[][]): (Leve
         primaryHeader = primaryHeaders[i] ?? primaryHeader;
         secondaryHeader = secondaryHeaders[i] ?? secondaryHeader;
         const rawWorld = primaryHeader.replace(/[\n\r]/g, '');
+        const rawSubCategory = specificHeaders[i]?.replace(/[\n\r]/g, '') ?? null;
         const levelData = {
             world: WORLD_SHORT_NAMES[rawWorld] ?? rawWorld,
             episode: secondaryHeader.replace(/[\n\r]/g, ''),
-            subCategory: specificHeaders[i]?.replace(/[\n\r]/g, '') ?? null,
+            subCategory:
+                rawSubCategory !== null && rawSubCategory in SUB_CATEGORY_SHORT_NAMES
+                    ? SUB_CATEGORY_SHORT_NAMES[rawSubCategory]
+                    : rawSubCategory,
             id: i,
         };
         headers.push({
