@@ -43,7 +43,11 @@ export default function FilterControl(props: FilterControlProps) {
         <>
             <div className={styles.ilSelector}>
                 <label htmlFor="world-select">World</label>
-                <select name="world" id="world-select" onChange={onWorldChanged}>
+                <select
+                    name="world"
+                    id="world-select"
+                    value={selectedWorld}
+                    onChange={onWorldChanged}>
                     <option value="none" key="none"></option>
                     {primarySelect.map(world => {
                         return (
