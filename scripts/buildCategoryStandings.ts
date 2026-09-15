@@ -1,11 +1,14 @@
 import ILData from '../types/ILData';
 import PlayerData from '../types/PlayerData';
-import { CATEGORIES } from '../data/categories';
+import { Category } from '../data/categories';
 
-export default function buildCategoryStandings(ilData: ILData[][]): Record<string, PlayerData[]> {
+export default function buildCategoryStandings(
+    ilData: ILData[][],
+    categories: Category[]
+): Record<string, PlayerData[]> {
     const standingsByCategory: Record<string, PlayerData[]> = {};
 
-    CATEGORIES.forEach(category => {
+    categories.forEach(category => {
         const totals = new Map<string, PlayerData>();
 
         category.levelIds.forEach(levelId => {
