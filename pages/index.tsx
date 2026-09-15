@@ -8,7 +8,6 @@ import ILData from '../types/ILData';
 import LevelData from '../types/LevelData';
 import styles from '../styles/index.module.css';
 import Head from 'next/head';
-import Link from 'next/link';
 import Footer from '../components/Footer';
 import FilterHeader from '../components/FilterHeader';
 import PlayerTable from '../components/PlayerTable';
@@ -66,8 +65,8 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
           (selectedIL == -1 && !!selectedCategoryLabel ? ' - ' + selectedCategoryLabel : '');
 return (
   <>
-    <Link href="/">
-        <a style={{
+    <a href="https://ilview.sunmar.io/"
+        style={{
         position: 'fixed',
         top: 10,
         left: 10,
@@ -81,17 +80,15 @@ return (
         display: 'flex',
         alignItems: 'center',
         }}
-       onClick={() => window.location.reload()}
       >
             <img src="/spinshine.gif"
           alt="Home"
           style={{
-        width: '50px', 
+        width: '50px',
         height: '50px',
         display: 'block',
       }}/>
         </a>
-          </Link>
     <div className={styles.indexContainer}>
       <Head>
         <title>Super Mario Sunshine IL Leaderboard</title>
