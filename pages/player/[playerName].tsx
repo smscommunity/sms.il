@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React from 'react';
 import FilterHeader from '../../components/FilterHeader';
+import FilterControl from '../../components/FilterControl';
 import Footer from '../../components/Footer';
 import ILTable from '../../components/ILTable';
 import loadILXls from '../../scripts/loadILXls';
@@ -10,6 +11,8 @@ import PlayerData from '../../types/PlayerData';
 import SortControl from '../../components/SortControl';
 import CategorySortControl from '../../components/CategorySortControl';
 import { CATEGORIES } from '../../data/categories';
+import styles from '../../styles/index.module.css';
+import useTableWidth from '../../hooks/useTableWidth';
 
 export interface PlayerPageProps {
     playerData: PlayerData;
@@ -42,6 +45,7 @@ export default function PlayerPage(props: PlayerPageProps) {
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
+    const [tableWrapperRef, tableWidth] = useTableWidth();
     const levelData = playerIls.map(il => il.ilData).sort((a, b) => a.id - b.id);
     const submittedCount = playerIls.length;
     const withVideoCount = playerIls.filter(il => !!il.link).length;
@@ -99,10 +103,6 @@ export default function PlayerPage(props: PlayerPageProps) {
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
             </Head>
             <FilterHeader
-                selectedIL={selectedIL}
-                controlledSelectedWorld={controlledSelectedWorld}
-                levelData={levelData}
-                onSelectedILChange={setSelectedIL}
                 headerText={
                     playerData.name +
                     ' (Rank ' +
@@ -116,24 +116,35 @@ export default function PlayerPage(props: PlayerPageProps) {
                     ']'
                 }
             />
-            <SortControl
-                selectedSort={selectedSort}
-                sortOptions={[ ...sortFunctions.keys() ]}
-                onSelectedSortChangeInternal={setSelectedSort}
-            />
-            {selectedIL == -1 && (
-                <CategorySortControl
-                    selectedCategory={selectedCategory}
-                    onSelectedCategoryChange={setSelectedCategory}
-                    style={{ position: 'fixed', top: 230 }}
+            <div className={styles.sortRow} style={tableWidth ? { width: tableWidth } : undefined}>
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, gap: 16 }}>
+                    <FilterControl
+                        selectedIL={selectedIL}
+                        controlledSelectedWorld={controlledSelectedWorld}
+                        levelData={levelData}
+                        onSelectedILChange={setSelectedIL}
+                    />
+                    <SortControl
+                        selectedSort={selectedSort}
+                        sortOptions={[ ...sortFunctions.keys() ]}
+                        onSelectedSortChangeInternal={setSelectedSort}
+                    />
+                </div>
+                {selectedIL == -1 && (
+                    <CategorySortControl
+                        selectedCategory={selectedCategory}
+                        onSelectedCategoryChange={setSelectedCategory}
+                    />
+                )}
+            </div>
+            <div ref={tableWrapperRef}>
+                <ILTable
+                    ils={selectedIlData}
+                    isPlayerTable
+                    showEpisode={selectedIL == -1}
+                    showWorld={selectedWorld == 'none'}
                 />
-            )}
-            <ILTable
-                ils={selectedIlData}
-                isPlayerTable
-                showEpisode={selectedIL == -1}
-                showWorld={selectedWorld == 'none'}
-            />
+            </div>
             <Footer dateStamp={new Date(timestamp)} />
         </div>
     );
