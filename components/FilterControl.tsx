@@ -68,7 +68,7 @@ export default function FilterControl(props: FilterControlProps) {
                     {filteredEpisodes.map(episode => {
                         return (
                             <option key={episode.id} value={episode.id}>
-                                {episode.episode +
+                                {episode.episode.replace(/^Ep\.\s*/, '') +
                                     (episode.subCategory ? ' // ' + episode.subCategory : '')}
                             </option>
                         );

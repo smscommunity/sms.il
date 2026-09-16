@@ -42,7 +42,7 @@ export default function ILRow(props: ILRowProps) {
                 {showEpisode && (
                     <td>
                         <Link href={'/?il=' + data.ilData.id}>
-                            {data.ilData.episode +
+                            {data.ilData.episode.replace(/^Ep\.\s*/, '') +
                                 (data.ilData.subCategory ? ' // ' + data.ilData.subCategory : '')}
                         </Link>
                     </td>
