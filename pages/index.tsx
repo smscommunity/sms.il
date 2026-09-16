@@ -91,7 +91,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const headerText = !!selectedILData
         ? selectedILData.world +
           ' - ' +
-          selectedILData.episode +
+          selectedILData.episode.replace(/^Ep\.\s*/, '') +
           (!!selectedILData.subCategory ? ' (' + selectedILData.subCategory + ')' : '')
         : 'Super Mario Sunshine IL Leaderboards' + overallSuffix;
 return (
