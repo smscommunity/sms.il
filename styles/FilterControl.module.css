@@ -1,16 +1,18 @@
 .ilSelector {
-    width: 20%;
+    flex: 1;
+    width: 100%;
+    min-width: 160px;
     display: flex;
     flex-direction: column;
-    top: 100px;
-    left: 0;
     font-size: 20px;
-    padding: 24px;
-    position: absolute;
+    padding: 8px;
+    border-radius: 8px;
     background-color: rgba(33, 33, 33, 0.66);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .ilSelector select {
+    width: 100%;
     font-size: 20px;
-    margin: 8px 0;
+    margin: 4px 0 8px;
 }

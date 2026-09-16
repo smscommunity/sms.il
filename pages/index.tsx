@@ -13,8 +13,10 @@ import FilterHeader from '../components/FilterHeader';
 import PlayerTable from '../components/PlayerTable';
 import PlayerData from '../types/PlayerData';
 import CategorySortControl from '../components/CategorySortControl';
+import FilterControl from '../components/FilterControl';
 import buildCategoryStandings from '../scripts/buildCategoryStandings';
 import { CATEGORIES } from '../data/categories';
+import useTableWidth from '../hooks/useTableWidth';
 
 interface ILPageProps {
     ilData: ILData[][];
@@ -34,6 +36,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
+    const [tableWrapperRef, tableWidth] = useTableWidth();
 
     React.useEffect(() => {
         if (!router.query.il) return;
@@ -124,20 +127,22 @@ return (
       <Head>
         <title>Super Mario Sunshine IL Leaderboard</title>
       </Head>
-      <FilterHeader
-        selectedIL={selectedIL}
-        controlledSelectedWorld={controlledSelectedWorld}
-        levelData={levelData}
-        onSelectedILChange={setSelectedIL}
-        headerText={headerText}
-      />
-      {selectedIL == -1 && (
-        <CategorySortControl
-          selectedCategory={selectedCategory}
-          onSelectedCategoryChange={setSelectedCategory}
+      <FilterHeader headerText={headerText} />
+      <div className={styles.sortRow} style={tableWidth ? { width: tableWidth } : undefined}>
+        <FilterControl
+          selectedIL={selectedIL}
+          controlledSelectedWorld={controlledSelectedWorld}
+          levelData={levelData}
+          onSelectedILChange={setSelectedIL}
         />
-      )}
-      <div>
+        {selectedIL == -1 && (
+          <CategorySortControl
+            selectedCategory={selectedCategory}
+            onSelectedCategoryChange={setSelectedCategory}
+          />
+        )}
+      </div>
+      <div ref={tableWrapperRef}>
         {filteredIls.length > 0 ? (
           <ILTable ils={filteredIls} />
         ) : (
