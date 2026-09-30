@@ -4,15 +4,47 @@
     min-width: 160px;
     display: flex;
     flex-direction: column;
-    font-size: 20px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgba(33, 33, 33, 0.66);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    gap: 6px;
+    padding: 14px;
+    border-radius: var(--radius);
+    background-color: var(--surface-raised);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.sortSelector label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
 }
 
 .sortSelector select {
+    appearance: none;
+    -webkit-appearance: none;
     width: 100%;
-    font-size: 20px;
-    margin: 4px 0 8px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--control-border);
+    border-radius: var(--radius-sm);
+    padding: 8px 30px 8px 10px;
+    margin: 0 0 6px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23ffffff' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    background-size: 9px;
+}
+
+.sortSelector select:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.sortSelector select option {
+    background-color: #1a1a2e;
+    color: var(--text);
 }

@@ -7,10 +7,16 @@
 .sortRow {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 24px;
-    width: 50%;
-    margin: 0 auto 20px;
+    gap: 20px;
+    width: var(--content-width);
+    margin: 0 auto 22px;
+}
+
+@media screen and (max-width: 720px) {
+    .sortRow {
+        flex-direction: column;
+    }
 }

@@ -1,21 +1,59 @@
 .playerTable {
-    width: 50%;
-    margin: auto;
-    border-collapse: collapse;
-    margin: 20px auto;
+    width: var(--content-width);
+    margin: 0 auto 28px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
 }
 
 .playerTableHeader th {
-    font-size: 28px;
-    border: 2px solid black;
-    padding: 0 8px;
-    background-color: rgb(160, 130, 230);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    background-color: rgba(16, 16, 36, 0.94);
+    border: 0;
+    border-bottom: 1px solid var(--border-strong);
+    padding: 12px 14px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.playerTableHeader th:first-child {
+    text-align: center;
 }
 
 .playerTable tr:nth-child(odd) {
-    background-color: rgb(44, 44, 83);
+    background-color: var(--row-odd);
 }
 
 .playerTable tr:nth-child(even) {
-    background-color: rgb(25, 25, 73);
+    background-color: var(--row-even);
+}
+
+.playerTable tbody td:nth-child(3) {
+    text-align: left;
+    font-weight: 600;
+}
+
+.playerTable thead th:first-child {
+    border-top-left-radius: var(--radius);
+}
+
+.playerTable thead th:last-child {
+    border-top-right-radius: var(--radius);
+}
+
+.playerTable tbody tr:last-child td:first-child {
+    border-bottom-left-radius: var(--radius);
+}
+
+.playerTable tbody tr:last-child td:last-child {
+    border-bottom-right-radius: var(--radius);
 }
