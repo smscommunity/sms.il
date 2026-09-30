@@ -74,30 +74,9 @@ export default function PlayerPage(props: PlayerPageProps) {
     selectedIlData.sort(sortFunctions.get(selectedSort))
     return (
            <div style={{ position: 'relative' }}>
-    <a href="https://ilview.sunmar.io/"
-        style={{
-        position: 'fixed',
-        top: 10,
-        left: 10,
-        padding: '0',
-        background: 'none',
-        color: '#fff',
-        borderRadius: '4px',
-        textDecoration: 'none',
-        fontWeight: 'bold',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        }}
-      >
-            <img src="/spinshine.gif"
-          alt="Home"
-          style={{
-        width: '50px',
-        height: '50px',
-        display: 'block',
-      }}/>
-        </a>
+    <a href="https://ilview.sunmar.io/" className={styles.homeLink}>
+      <img src="/spinshine.gif" alt="Home" className={styles.homeIcon} />
+    </a>
             <Head>
               <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>{'Super Mario Sunshine IL Leaderboard - ' + playerData.name}</title>
@@ -110,9 +89,9 @@ export default function PlayerPage(props: PlayerPageProps) {
                     ': ' +
                     playerData.points +
                     ' points) [' +
-                    submittedCount +
-                    '/' +
                     withVideoCount +
+                    '/' +
+                    submittedCount +
                     ']'
                 }
             />
