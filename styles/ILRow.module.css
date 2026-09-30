@@ -1,16 +1,19 @@
 .ilRow {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .ilRow td {
-    border-bottom: 1px solid black;
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-    padding: 4px;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 11px 14px;
 }
 
-.ilRow td:not(:last-of-type) {
-    border-right: 2px solid black;
+.ilRow:last-child td {
+    border-bottom: 0;
+}
+
+.ilRow:hover td {
+    background-image: linear-gradient(var(--row-hover), var(--row-hover));
 }
 
 .ilRow .center {
@@ -20,40 +23,64 @@
 .ilRow .comments {
     max-width: 50%;
     overflow-wrap: anywhere;
-    font-size: 14px;
+    font-size: 15px;
+    color: var(--text-dim);
 }
 
 .ilRow .comments a {
+    color: var(--link);
     text-decoration-line: underline;
 }
 
-.ilFirst {
-    background-color: gold !important;
-    color: black;
+.ilFirst td {
+    background-color: rgba(255, 215, 0, 0.13);
 }
 
-.ilSecond {
-    background-color: silver !important;
-    color: black;
+.ilSecond td {
+    background-color: rgba(192, 192, 192, 0.11);
 }
 
-.ilThird {
-    background-color: #cd7f32 !important;
-    color: black;
+.ilThird td {
+    background-color: rgba(205, 127, 50, 0.12);
+}
+
+.ilFirst td:first-child {
+    box-shadow: inset 3px 0 0 var(--gold);
+}
+
+.ilSecond td:first-child {
+    box-shadow: inset 3px 0 0 var(--silver);
+}
+
+.ilThird td:first-child {
+    box-shadow: inset 3px 0 0 var(--bronze);
 }
 
 .medalHolder {
     display: flex;
-    justify-content: space-around;
+    gap: 16px;
+    justify-content: flex-start;
 }
 
 .medalHolder > span {
-    width: 33%;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;
+    color: var(--text-dim);
 }
 
 @media screen and (max-width: 1024px) {
-    .medalHolder > span {
-        width: 33%;
-        text-align: center;
+    .ilRow {
+        font-size: 15px;
+    }
+
+    .ilRow td {
+        padding: 9px 10px;
+    }
+
+    .medalHolder {
+        gap: 10px;
+        justify-content: space-between;
     }
 }

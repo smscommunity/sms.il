@@ -3,13 +3,24 @@
     bottom: 0;
     display: flex;
     flex-direction: row;
-    background-color: rgba(33, 33, 33, 0.66);
+    flex-wrap: wrap;
     justify-content: center;
-    padding: 8px;
+    align-items: center;
+    background-color: var(--surface-bar);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 11px;
     margin-top: auto;
+    font-size: 14px;
+    color: var(--text-dim);
 }
 
 .ilFooter a {
     padding: 0 4px;
-    color: lightblue;
+    color: var(--link);
+}
+
+.ilFooter a:hover {
+    text-decoration: underline;
 }

@@ -1,3 +1,41 @@
+:root {
+    /* Surfaces */
+    --surface: rgba(20, 20, 45, 0.82);
+    --surface-raised: rgba(33, 33, 33, 0.72);
+    --surface-bar: rgba(18, 18, 38, 0.72);
+
+    /* Table rows */
+    --row-odd: rgba(44, 44, 83, 0.72);
+    --row-even: rgba(25, 25, 73, 0.72);
+    --row-hover: rgba(255, 255, 255, 0.05);
+
+    /* Lines */
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --control-border: rgba(255, 255, 255, 0.18);
+
+    /* Text */
+    --text: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.55);
+    --text-dim: rgba(255, 255, 255, 0.75);
+    --link: #8fc6ff;
+
+    /* Medals */
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+    --accent: #ffd54a;
+
+    /* Shape */
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.35);
+
+    /* Layout — single source of truth for table + control-row width */
+    --content-width: min(1100px, 92vw);
+}
+
 html,
 body {
     padding: 0;
@@ -5,7 +43,10 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
         Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
     background-image: url('/sunshinetile.png');
-    color: white;
+    background-attachment: fixed;
+    color: var(--text);
+    /* Digits line up in columns — matters for a times-based leaderboard */
+    font-variant-numeric: tabular-nums;
 }
 
 a {
@@ -15,4 +56,10 @@ a {
 
 * {
     box-sizing: border-box;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
 }

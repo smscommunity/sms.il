@@ -1,8 +1,29 @@
 .ilHeader {
     position: sticky;
     top: 0;
+    z-index: 5;
     display: flex;
     flex-direction: row;
-    background-color: rgba(33, 33, 33, 0.66);
     justify-content: center;
+    align-items: center;
+    background-color: var(--surface-bar);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 22px;
+}
+
+.ilHeader h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+    .ilHeader h2 {
+        font-size: 17px;
+    }
 }

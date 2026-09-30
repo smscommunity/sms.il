@@ -4,27 +4,45 @@
     min-width: 160px;
     display: flex;
     flex-direction: column;
-    font-size: 20px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgba(33, 33, 33, 0.66);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    gap: 6px;
+    padding: 14px;
+    border-radius: var(--radius);
+    background-color: var(--surface-raised);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.categorySelector label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
 }
 
 .categorySelector button {
     width: 100%;
-    font-size: 20px;
-    margin: 4px 0;
-    padding: 4px;
-    background: none;
-    color: inherit;
-    border: 1px solid #fff;
-    border-radius: 4px;
+    font: inherit;
+    font-size: 15px;
+    text-align: left;
+    margin: 3px 0;
+    padding: 8px 10px;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.categorySelector button:hover {
+    background-color: rgba(255, 255, 255, 0.09);
+    color: var(--text);
 }
 
 .categorySelector button.selected {
-    background-color: #fff;
-    color: #212121;
-    font-weight: bold;
+    background-color: rgba(255, 213, 74, 0.14);
+    border-color: rgba(255, 213, 74, 0.5);
+    color: var(--text);
+    font-weight: 600;
 }
