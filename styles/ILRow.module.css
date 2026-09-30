@@ -12,12 +12,17 @@
     border-bottom: 0;
 }
 
+/* Layered as a background-image so it tints medal rows instead of erasing them */
 .ilRow:hover td {
     background-image: linear-gradient(var(--row-hover), var(--row-hover));
 }
 
 .ilRow .center {
     text-align: center;
+}
+
+.ilRow .playerName {
+    font-weight: 600;
 }
 
 .ilRow .comments {
@@ -32,6 +37,7 @@
     text-decoration-line: underline;
 }
 
+/* Medal rows: tint + accent edge rather than a solid fill */
 .ilFirst td {
     background-color: rgba(255, 215, 0, 0.13);
 }

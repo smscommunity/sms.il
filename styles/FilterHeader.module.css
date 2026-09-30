@@ -10,7 +10,8 @@
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
-    padding: 14px 16px;
+    min-height: var(--header-height);
+    padding: 10px 16px;
     margin-bottom: 22px;
 }
 
