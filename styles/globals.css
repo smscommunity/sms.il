@@ -34,6 +34,15 @@
 
     /* Layout — single source of truth for table + control-row width */
     --content-width: min(1100px, 92vw);
+
+    /* Header bar height — the home icon centres itself against this */
+    --header-height: 53px;
+}
+
+@media screen and (max-width: 1024px) {
+    :root {
+        --header-height: 48px;
+    }
 }
 
 html,
