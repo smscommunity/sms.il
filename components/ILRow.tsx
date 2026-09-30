@@ -34,7 +34,7 @@ export default function ILRow(props: ILRowProps) {
                 </td>
                 {isPlayerTable && <td className={styles.center}>{pointValue}</td>}
                 {!isPlayerTable && (
-                    <td>
+                    <td className={styles.playerName}>
                         <Link href={'/player/' + name}>{name}</Link>
                     </td>
                 )}

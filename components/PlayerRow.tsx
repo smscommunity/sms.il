@@ -27,7 +27,7 @@ export default function PlayerRow(props: PlayerRowProps) {
                 <td className={styles.center}>
                     {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
                 </td>
-                <td>
+                <td className={styles.playerName}>
                     <Link href={'/player/' + name}>{name}</Link>
                 </td>
                 <td className={styles.center}>{points}</td>
