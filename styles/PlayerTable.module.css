@@ -6,7 +6,6 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    overflow: hidden;
 }
 
 .playerTableHeader th {
@@ -21,7 +20,7 @@
     padding: 12px 14px;
     text-align: left;
     position: sticky;
-    top: 0;
+    top: var(--header-height);
     z-index: 2;
 }
 
