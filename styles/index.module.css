@@ -15,13 +15,19 @@
     margin: 0 auto 22px;
 }
 
+.sortRow > * {
+    min-width: 0;
+}
+
 @media screen and (max-width: 720px) {
     .sortRow {
         flex-direction: column;
+        /* 'flex-start' would shrink each child to its content width in column
+           mode — 'stretch' is what makes them span to the edges. */
+        align-items: stretch;
     }
 }
 
-/* Home link — sized and positioned to sit centred in the sticky header bar */
 .homeLink {
     position: fixed;
     top: 0;
