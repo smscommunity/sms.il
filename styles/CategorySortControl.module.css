@@ -43,3 +43,24 @@
     background-color: #1a1a2e;
     color: var(--text);
 }
+
+.categorySelector .checkboxRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkboxRow input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #ffd54a;
+    cursor: pointer;
+}
