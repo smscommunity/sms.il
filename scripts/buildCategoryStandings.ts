@@ -50,3 +50,40 @@ export default function buildCategoryStandings(
 
     return standingsByCategory;
 }
+
+// Re-ranks one episode's runs (already sorted best-first) as if they were the only
+// runs submitted. Ranks and points follow the same tie rules as loadILXls.
+export function rerankIls(ils: ILData[]): ILData[] {
+    let rank = 0;
+    let skip = 0;
+    const ranked = ils.map((il, index) => {
+        if (index > 0 && ils[index - 1].time == il.time) {
+            skip++;
+        } else {
+            rank = rank + skip + 1;
+            skip = 0;
+        }
+        return { ...il, rank };
+    });
+
+    let points = 0;
+    skip = 0;
+    ranked.reverse();
+    return ranked
+        .map((il, index) => {
+            if (index > 0 && il.time == ranked[index - 1].time) {
+                skip++;
+            } else {
+                points = points + skip + 1;
+                skip = 0;
+            }
+            return { ...il, pointValue: points };
+        })
+        .reverse();
+}
+
+// Every episode's runs, keeping only those with a video and re-ranked among themselves.
+export function rerankVideoOnly(ilData: ILData[][]): ILData[][] {
+    // Some slots have no episode (null after page-data serialization), so skip those.
+    return ilData.map(ils => (ils ? rerankIls(ils.filter(il => !!il.link)) : ils));
+}
