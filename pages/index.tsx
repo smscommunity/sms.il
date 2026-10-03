@@ -12,9 +12,15 @@ import Footer from '../components/Footer';
 import FilterHeader from '../components/FilterHeader';
 import PlayerTable from '../components/PlayerTable';
 import PlayerData from '../types/PlayerData';
-import CategorySortControl from '../components/CategorySortControl';
+import CategorySortControl, {
+    SORT_OVERALL,
+    resolveCategorySort,
+} from '../components/CategorySortControl';
 import FilterControl from '../components/FilterControl';
-import buildCategoryStandings from '../scripts/buildCategoryStandings';
+import buildCategoryStandings, {
+    rerankIls,
+    rerankVideoOnly,
+} from '../scripts/buildCategoryStandings';
 import { CATEGORIES } from '../data/categories';
 import useTableWidth from '../hooks/useTableWidth';
 
@@ -33,7 +39,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const dateStamp = new Date(timestamp);
     const router = useRouter();
     const [selectedIL, setSelectedIL] = React.useState(-1);
-    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+    const [selectedSort, setSelectedSort] = React.useState(SORT_OVERALL);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const [tableWrapperRef, tableWidth] = useTableWidth();
@@ -47,12 +53,15 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         setSelectedWorld(linkedILData.world);
     }, [router.query.il]);
 
+    const { hasVideoOnly, selectedCategory } = resolveCategorySort(selectedSort, selectedIL != -1);
+
     let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
 
     if (selectedIL != -1) {
         selectedILData = levelData[selectedIL - 7];
-        filteredIls = ilData[selectedIL - 7];
+        filteredIls = ilData[selectedIL - 7] ?? [];
+        if (hasVideoOnly) filteredIls = rerankIls(filteredIls.filter(il => !!il.link));
     } else {
         selectedILData = undefined;
         filteredIls = [];
@@ -69,9 +78,22 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
             { key: 'combined', label: '', levelIds: combinedLevelIds },
         ]).combined;
     }, [ilData, levelData, selectedWorld, selectedCategory]);
+    // Standings as if runs without video didn't exist (whole game, or the selected world).
+    const videoOnlyIlData = React.useMemo(() => rerankVideoOnly(ilData), [ilData]);
+    const hasVideoPlayerData = React.useMemo(() => {
+        if (!hasVideoOnly) return null;
+        const levelIds = levelData
+            .filter(level => !!level && (selectedWorld == 'none' || level.world == selectedWorld))
+            .map(level => level.id);
+        return buildCategoryStandings(videoOnlyIlData, [
+            { key: 'hasVideo', label: '', levelIds },
+        ]).hasVideo;
+    }, [videoOnlyIlData, levelData, selectedWorld, hasVideoOnly]);
     const displayedPlayerData =
         selectedIL != -1
             ? playerData
+            : !!hasVideoPlayerData
+            ? hasVideoPlayerData
             : !!worldAndCategoryPlayerData
             ? worldAndCategoryPlayerData
             : selectedWorld != 'none'
@@ -79,8 +101,9 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
             : !!selectedCategory
             ? categoryPlayerData[selectedCategory]
             : playerData;
-    const selectedCategoryLabel = CATEGORIES.find(category => category.key === selectedCategory)
-        ?.label;
+    const selectedCategoryLabel = hasVideoOnly
+        ? 'Has Video'
+        : CATEGORIES.find(category => category.key === selectedCategory)?.label;
     const overallSuffix =
         selectedIL != -1
             ? ''
@@ -114,15 +137,14 @@ return (
           levelData={levelData}
           onSelectedILChange={setSelectedIL}
         />
-        {selectedIL == -1 && (
-          <CategorySortControl
-            selectedCategory={selectedCategory}
-            onSelectedCategoryChange={setSelectedCategory}
-          />
-        )}
+        <CategorySortControl
+          selectedSort={selectedSort}
+          episodeSelected={selectedIL != -1}
+          onSelectedSortChange={setSelectedSort}
+        />
       </div>
       <div ref={tableWrapperRef}>
-        {filteredIls.length > 0 ? (
+        {selectedIL != -1 ? (
           <ILTable ils={filteredIls} />
         ) : (
           <PlayerTable players={displayedPlayerData} />

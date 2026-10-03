@@ -9,14 +9,20 @@ import loadILXls from '../../scripts/loadILXls';
 import ILData from '../../types/ILData';
 import PlayerData from '../../types/PlayerData';
 import SortControl from '../../components/SortControl';
-import CategorySortControl from '../../components/CategorySortControl';
+import CategorySortControl, {
+    SORT_OVERALL,
+    resolveCategorySort,
+} from '../../components/CategorySortControl';
 import { CATEGORIES } from '../../data/categories';
 import styles from '../../styles/index.module.css';
 import useTableWidth from '../../hooks/useTableWidth';
+import { rerankVideoOnly } from '../../scripts/buildCategoryStandings';
 
 export interface PlayerPageProps {
     playerData: PlayerData;
     playerIls: ILData[];
+    // This player's runs with video, re-ranked as if runs without video didn't exist.
+    playerVideoIls: ILData[];
     timestamp: number;
 }
 
@@ -41,7 +47,7 @@ function sortByRank(a: ILData, b: ILData) {
 }
 
 export default function PlayerPage(props: PlayerPageProps) {
-    const { playerData, playerIls, timestamp } = props;
+    const { playerData, playerIls, playerVideoIls, timestamp } = props;
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
@@ -50,20 +56,25 @@ export default function PlayerPage(props: PlayerPageProps) {
     const submittedCount = playerIls.length;
     const withVideoCount = playerIls.filter(il => !!il.link).length;
     const [selectedSort, setSelectedSort] = React.useState("Episode");
-    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+    const [selectedCategorySort, setSelectedCategorySort] = React.useState(SORT_OVERALL);
+    const { hasVideoOnly, selectedCategory } = resolveCategorySort(
+        selectedCategorySort,
+        selectedIL != -1
+    );
     const sortFunctions = new Map([
         ["Episode", sortByEpisode],
         ["Points", sortByPoints],
         ["Rank", sortByRank]
     ])
+    const sourceIls = hasVideoOnly ? playerVideoIls : playerIls;
     let selectedIlData = [];
     if (selectedWorld != 'none' || selectedIL != -1) {
         console.log(selectedWorld);
-        selectedIlData = playerIls.filter(il =>
+        selectedIlData = sourceIls.filter(il =>
             selectedIL != -1 ? il.ilData.id == selectedIL : il.ilData.world == selectedWorld
         );
     } else {
-        selectedIlData = playerIls;
+        selectedIlData = [...sourceIls];
     }
     if (selectedCategory) {
         const categoryLevelIds = new Set(
@@ -109,12 +120,11 @@ export default function PlayerPage(props: PlayerPageProps) {
                         onSelectedSortChangeInternal={setSelectedSort}
                     />
                 </div>
-                {selectedIL == -1 && (
-                    <CategorySortControl
-                        selectedCategory={selectedCategory}
-                        onSelectedCategoryChange={setSelectedCategory}
-                    />
-                )}
+                <CategorySortControl
+                    selectedSort={selectedCategorySort}
+                    episodeSelected={selectedIL != -1}
+                    onSelectedSortChange={setSelectedCategorySort}
+                />
             </div>
             <div ref={tableWrapperRef}>
                 <ILTable
@@ -147,11 +157,15 @@ export const getStaticProps: GetStaticProps = async context => {
     const playerName = context.params!.playerName as string;
     const playerIls = data.playerToIlMap.get(playerName);
     const playerData = data.playerData.find(entry => entry.name == playerName);
+    const playerVideoIls = rerankVideoOnly(data.ilData)
+        .flat()
+        .filter(il => il.playerData.name == playerName);
     const timestamp = Date.now();
     return {
         props: {
             playerData,
             playerIls,
+            playerVideoIls,
             timestamp,
         },
     };
