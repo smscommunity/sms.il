@@ -11,7 +11,7 @@ import PlayerData from '../../types/PlayerData';
 import SortControl from '../../components/SortControl';
 import CategorySortControl, {
     SORT_OVERALL,
-    resolveCategorySort,
+    resolveCategory,
 } from '../../components/CategorySortControl';
 import { CATEGORIES } from '../../data/categories';
 import styles from '../../styles/index.module.css';
@@ -57,10 +57,8 @@ export default function PlayerPage(props: PlayerPageProps) {
     const withVideoCount = playerIls.filter(il => !!il.link).length;
     const [selectedSort, setSelectedSort] = React.useState("Episode");
     const [selectedCategorySort, setSelectedCategorySort] = React.useState(SORT_OVERALL);
-    const { hasVideoOnly, selectedCategory } = resolveCategorySort(
-        selectedCategorySort,
-        selectedIL != -1
-    );
+    const [hasVideoOnly, setHasVideoOnly] = React.useState(false);
+    const selectedCategory = resolveCategory(selectedCategorySort, selectedIL != -1);
     const sortFunctions = new Map([
         ["Episode", sortByEpisode],
         ["Points", sortByPoints],
@@ -124,6 +122,8 @@ export default function PlayerPage(props: PlayerPageProps) {
                     selectedSort={selectedCategorySort}
                     episodeSelected={selectedIL != -1}
                     onSelectedSortChange={setSelectedCategorySort}
+                    hasVideoOnly={hasVideoOnly}
+                    onHasVideoOnlyChange={setHasVideoOnly}
                 />
             </div>
             <div ref={tableWrapperRef}>

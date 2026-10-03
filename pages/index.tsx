@@ -14,7 +14,7 @@ import PlayerTable from '../components/PlayerTable';
 import PlayerData from '../types/PlayerData';
 import CategorySortControl, {
     SORT_OVERALL,
-    resolveCategorySort,
+    resolveCategory,
 } from '../components/CategorySortControl';
 import FilterControl from '../components/FilterControl';
 import buildCategoryStandings, {
@@ -40,6 +40,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const router = useRouter();
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const [selectedSort, setSelectedSort] = React.useState(SORT_OVERALL);
+    const [hasVideoOnly, setHasVideoOnly] = React.useState(false);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const [tableWrapperRef, tableWidth] = useTableWidth();
@@ -53,7 +54,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         setSelectedWorld(linkedILData.world);
     }, [router.query.il]);
 
-    const { hasVideoOnly, selectedCategory } = resolveCategorySort(selectedSort, selectedIL != -1);
+    const selectedCategory = resolveCategory(selectedSort, selectedIL != -1);
 
     let filteredIls: ILData[] = [];
     let selectedILData: LevelData | undefined;
@@ -78,17 +79,25 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
             { key: 'combined', label: '', levelIds: combinedLevelIds },
         ]).combined;
     }, [ilData, levelData, selectedWorld, selectedCategory]);
-    // Standings as if runs without video didn't exist (whole game, or the selected world).
+    // Standings as if runs without video didn't exist, for the selected world and/or category.
     const videoOnlyIlData = React.useMemo(() => rerankVideoOnly(ilData), [ilData]);
     const hasVideoPlayerData = React.useMemo(() => {
         if (!hasVideoOnly) return null;
+        const categoryLevelIds = !!selectedCategory
+            ? new Set(CATEGORIES.find(category => category.key == selectedCategory)?.levelIds)
+            : null;
         const levelIds = levelData
-            .filter(level => !!level && (selectedWorld == 'none' || level.world == selectedWorld))
+            .filter(
+                level =>
+                    !!level &&
+                    (selectedWorld == 'none' || level.world == selectedWorld) &&
+                    (!categoryLevelIds || categoryLevelIds.has(level.id))
+            )
             .map(level => level.id);
         return buildCategoryStandings(videoOnlyIlData, [
             { key: 'hasVideo', label: '', levelIds },
         ]).hasVideo;
-    }, [videoOnlyIlData, levelData, selectedWorld, hasVideoOnly]);
+    }, [videoOnlyIlData, levelData, selectedWorld, selectedCategory, hasVideoOnly]);
     const displayedPlayerData =
         selectedIL != -1
             ? playerData
@@ -101,19 +110,19 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
             : !!selectedCategory
             ? categoryPlayerData[selectedCategory]
             : playerData;
-    const selectedCategoryLabel = hasVideoOnly
-        ? 'Has Video'
-        : CATEGORIES.find(category => category.key === selectedCategory)?.label;
+    const selectedCategoryLabel = CATEGORIES.find(category => category.key === selectedCategory)
+        ?.label;
     const overallSuffix =
         selectedIL != -1
             ? ''
-            : selectedWorld != 'none' && !!selectedCategoryLabel
-            ? ' - ' + selectedWorld + ' - ' + selectedCategoryLabel
-            : selectedWorld != 'none'
-            ? ' - ' + selectedWorld
-            : !!selectedCategoryLabel
-            ? ' - ' + selectedCategoryLabel
-            : '';
+            : [
+                  selectedWorld != 'none' ? selectedWorld : null,
+                  selectedCategoryLabel,
+                  hasVideoOnly ? 'Has Video' : null,
+              ]
+                  .filter(part => !!part)
+                  .map(part => ' - ' + part)
+                  .join('');
     const headerText = !!selectedILData
         ? selectedILData.world +
           ' - ' +
@@ -141,6 +150,8 @@ return (
           selectedSort={selectedSort}
           episodeSelected={selectedIL != -1}
           onSelectedSortChange={setSelectedSort}
+          hasVideoOnly={hasVideoOnly}
+          onHasVideoOnlyChange={setHasVideoOnly}
         />
       </div>
       <div ref={tableWrapperRef}>
