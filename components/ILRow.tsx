@@ -13,24 +13,25 @@ export interface ILRowProps {
 
 export default function ILRow(props: ILRowProps) {
     const { data, showWorld, showEpisode, isPlayerTable } = props;
-    const { playerData, time, link, comment, rank, pointValue } = data;
+    const { playerData, time, link, comment, rank, medal, pointValue } = data;
     const { name } = playerData;
+    // Medals follow `medal` (video-only), not rank, so a top time without video shows its number.
     return (
         <>
             <tr
                 className={
                     styles.ilRow +
                     ' ' +
-                    (rank == 1
+                    (medal == 1
                         ? styles.ilFirst
-                        : rank == 2
+                        : medal == 2
                         ? styles.ilSecond
-                        : rank == 3
+                        : medal == 3
                         ? styles.ilThird
                         : '')
                 }>
                 <td className={styles.center}>
-                    {rank == 1 ? '🥇' : rank == 2 ? '🥈' : rank == 3 ? '🥉' : rank}
+                    {medal == 1 ? '🥇' : medal == 2 ? '🥈' : medal == 3 ? '🥉' : rank}
                 </td>
                 {isPlayerTable && <td className={styles.center}>{pointValue}</td>}
                 {!isPlayerTable && (
