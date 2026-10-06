@@ -3,6 +3,7 @@ import path from 'path';
 import PlayerData from '../types/PlayerData';
 import LevelData from '../types/LevelData';
 import ILData from '../types/ILData';
+import assignMedals from './assignMedals';
 
 interface RawSheetData {
     time: string;
@@ -36,7 +37,7 @@ export default function (): LoadedData {
 
     const playerData: PlayerData[] = [];
     const playerToIlMap: Map<string, ILData[]> = new Map<string, ILData[]>();
-    const unsortedData: Omit<ILData, 'rank' | 'pointValue'>[][] = new Array(levelData.length + 7);
+    const unsortedData: Omit<ILData, 'rank' | 'pointValue' | 'medal'>[][] = new Array(levelData.length + 7);
     // Index 0: Name
     // Index 1: Points
     // Index 2-4: Medals
@@ -71,7 +72,7 @@ export default function (): LoadedData {
                 if (!levelData[index]) return;
                 
                 if (!!submission && !!submission.time) {
-                    const newData: Omit<ILData, 'rank' | 'pointValue'> = {
+                    const newData: Omit<ILData, 'rank' | 'pointValue' | 'medal'> = {
                         ilData: levelData[index]!,
                         playerData: playerEntry,
                         time: parseTime(submission.time),
@@ -95,19 +96,21 @@ export default function (): LoadedData {
         let skip = 0;
         // there's probably a better way to do this without iterating twice
         // but this is technically O(n) so eat me.
-        let rankedList: Omit<ILData, 'pointValue'>[] = ilList.map((value, index) => {
-            if (index > 0 && ilList[index - 1].time == value.time) {
-                skip++;
-            } else {
-                rank = rank + skip + 1;
-                skip = 0;
-            }
-            const newData = {
-                ...value,
-                rank,
-            };
-            return newData;
-        });
+        let rankedList: Omit<ILData, 'pointValue'>[] = assignMedals(
+            ilList.map((value, index) => {
+                if (index > 0 && ilList[index - 1].time == value.time) {
+                    skip++;
+                } else {
+                    rank = rank + skip + 1;
+                    skip = 0;
+                }
+                const newData = {
+                    ...value,
+                    rank,
+                };
+                return newData;
+            })
+        );
 
         let points = 0;
         skip = 0;
@@ -135,6 +138,18 @@ export default function (): LoadedData {
             })
             .reverse();
     });
+
+    // The sheet's medal columns count runs without video, so recount from the video-only medals.
+    playerData.forEach(player => {
+        player.medals = { gold: 0, silver: 0, bronze: 0 };
+    });
+    ilData.forEach(ils =>
+        ils?.forEach(il => {
+            if (il.medal === 1) il.playerData.medals.gold += 1;
+            else if (il.medal === 2) il.playerData.medals.silver += 1;
+            else if (il.medal === 3) il.playerData.medals.bronze += 1;
+        })
+    );
 
     cachedReadData = {
         levelData,

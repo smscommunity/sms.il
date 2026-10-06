@@ -1,6 +1,7 @@
 import ILData from '../types/ILData';
 import PlayerData from '../types/PlayerData';
 import { Category } from '../data/categories';
+import assignMedals from './assignMedals';
 
 export default function buildCategoryStandings(
     ilData: ILData[][],
@@ -26,9 +27,9 @@ export default function buildCategoryStandings(
                 }
                 player.points += il.pointValue;
                 player.submissions += 1;
-                if (il.rank === 1) player.medals.gold += 1;
-                else if (il.rank === 2) player.medals.silver += 1;
-                else if (il.rank === 3) player.medals.bronze += 1;
+                if (il.medal === 1) player.medals.gold += 1;
+                else if (il.medal === 2) player.medals.silver += 1;
+                else if (il.medal === 3) player.medals.bronze += 1;
             });
         });
 
@@ -56,7 +57,7 @@ export default function buildCategoryStandings(
 export function rerankIls(ils: ILData[]): ILData[] {
     let rank = 0;
     let skip = 0;
-    const ranked = ils.map((il, index) => {
+    const ranked = assignMedals(ils).map((il, index) => {
         if (index > 0 && ils[index - 1].time == il.time) {
             skip++;
         } else {
