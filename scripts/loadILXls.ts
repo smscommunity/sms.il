@@ -167,9 +167,7 @@ function parseTime(time: string): number {
     const dotSplit = colonSplit[colonSplit.length > 1 ? 1 : 0].split('.');
     const millis = dotSplit.length > 1 ? parseInt(dotSplit[1].padEnd(3, '0')) : 0;
     const seconds = parseInt(dotSplit[0]);
-    // Round to the nearest hundredth (e.g. 1:22.549 -> 1:22.55) so sorting, ties, ranks and medals
-    // all use the same time that's displayed.
-    return Math.round((millis + seconds * 1000 + minutes * 60 * 1000) / 10) * 10;
+    return millis + seconds * 1000 + minutes * 60 * 1000;
 }
 
 // The IL sheet names worlds with their full in-game titles; we display the short form instead.
