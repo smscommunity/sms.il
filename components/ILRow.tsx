@@ -67,11 +67,9 @@ export default function ILRow(props: ILRowProps) {
 }
 
 function parseMilisecondsToUserTime(time: number) {
-    // Round to the nearest hundredth first (e.g. 1:22.549 -> 1:22.55), so carries roll over correctly.
-    const totalHundredths = Math.round(time / 10);
-    const minutes = Math.floor(totalHundredths / 6000);
-    const seconds = Math.floor((totalHundredths % 6000) / 100);
-    const hundredths = totalHundredths % 100;
+    const minutes = Math.floor(time / (60 * 1000));
+    const seconds = Math.floor((time % (60 * 1000)) / 1000);
+    const hundredths = Math.floor(((time % (60 * 1000)) % 1000) / 10);
     return (
         '' +
         (minutes > 0 ? minutes + ':' : '') +
