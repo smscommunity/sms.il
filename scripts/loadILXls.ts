@@ -161,11 +161,13 @@ export default function (): LoadedData {
     return cachedReadData;
 }
 
+// The leaderboard is timed to the hundredth, so any third decimal is dropped here
+// (e.g. 12.175 -> 12.17). That way it ties with 12.17 instead of ranking below it.
 function parseTime(time: string): number {
     const colonSplit = time.toString().split(':');
     const minutes = colonSplit.length > 1 ? parseInt(colonSplit[0]) : 0;
     const dotSplit = colonSplit[colonSplit.length > 1 ? 1 : 0].split('.');
-    const millis = dotSplit.length > 1 ? parseInt(dotSplit[1].padEnd(3, '0')) : 0;
+    const millis = dotSplit.length > 1 ? parseInt(dotSplit[1].slice(0, 2).padEnd(2, '0')) * 10 : 0;
     const seconds = parseInt(dotSplit[0]);
     return millis + seconds * 1000 + minutes * 60 * 1000;
 }
