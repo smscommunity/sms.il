@@ -17,6 +17,8 @@ export interface CategorySortControlProps {
     onSelectedSortChange: (newValue: string) => void;
     hasVideoOnly: boolean;
     onHasVideoOnlyChange: (newValue: boolean) => void;
+    // When set, a "WR History" button shows next to Has Video (level views only).
+    onWrHistoryClick?: () => void;
 }
 
 export default function CategorySortControl(props: CategorySortControlProps) {
@@ -26,6 +28,7 @@ export default function CategorySortControl(props: CategorySortControlProps) {
         onSelectedSortChange,
         hasVideoOnly,
         onHasVideoOnlyChange,
+        onWrHistoryClick,
     } = props;
     const effectiveSort = resolveCategory(selectedSort, episodeSelected) ?? SORT_OVERALL;
     return (
@@ -44,14 +47,24 @@ export default function CategorySortControl(props: CategorySortControlProps) {
                         </option>
                     ))}
             </select>
-            <label className={styles.checkboxRow}>
-                <input
-                    type="checkbox"
-                    checked={hasVideoOnly}
-                    onChange={e => onHasVideoOnlyChange(e.currentTarget.checked)}
-                />
-                Has Video
-            </label>
+            <div className={styles.optionsRow}>
+                <label className={styles.checkboxRow}>
+                    <input
+                        type="checkbox"
+                        checked={hasVideoOnly}
+                        onChange={e => onHasVideoOnlyChange(e.currentTarget.checked)}
+                    />
+                    Has Video
+                </label>
+                {episodeSelected && !!onWrHistoryClick && (
+                    <button
+                        type="button"
+                        className={styles.wrHistoryButton}
+                        onClick={onWrHistoryClick}>
+                        WR History
+                    </button>
+                )}
+            </div>
         </div>
     );
 }

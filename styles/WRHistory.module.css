@@ -1,0 +1,181 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(760px, 100%);
+    max-height: 85vh;
+    background-color: rgba(20, 20, 45, 0.97);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.dialogHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.dialogHeader h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.subtitle {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--text-dim);
+}
+
+.closeButton {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--control-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.closeButton:hover {
+    border-color: var(--accent);
+}
+
+.dialogBody {
+    overflow: auto;
+}
+
+.message {
+    margin: 0;
+    padding: 24px 18px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.historyTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.historyTable th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    background-color: rgba(16, 16, 36, 0.98);
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.historyTable td {
+    padding: 9px 12px;
+    vertical-align: top;
+}
+
+.historyTable tbody tr:nth-child(odd) {
+    background-color: var(--row-odd);
+}
+
+.historyTable tbody tr:nth-child(even) {
+    background-color: var(--row-even);
+}
+
+.historyTable tbody tr.current {
+    box-shadow: inset 3px 0 0 var(--gold);
+}
+
+.historyTable a:hover {
+    color: var(--link);
+}
+
+.date {
+    white-space: nowrap;
+    color: var(--text-dim);
+}
+
+.time {
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.note {
+    white-space: nowrap;
+    color: var(--text-dim);
+}
+
+.historyTable .videos {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.videos > * + * {
+    margin-left: 6px;
+}
+
+/* On phones the note moves under the time instead of taking its own column. */
+.noteInline {
+    display: none;
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 400;
+    white-space: normal;
+    color: var(--text-dim);
+}
+
+.footnote {
+    margin: 0;
+    padding: 10px 18px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+}
+
+@media screen and (max-width: 600px) {
+    .dialog {
+        max-height: 90vh;
+    }
+
+    .historyTable {
+        font-size: 13px;
+    }
+
+    .historyTable th,
+    .historyTable td {
+        padding: 8px 6px;
+    }
+
+    .historyTable .note {
+        display: none;
+    }
+
+    .noteInline {
+        display: block;
+    }
+}

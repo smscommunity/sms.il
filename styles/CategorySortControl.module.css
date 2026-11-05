@@ -64,3 +64,27 @@
     accent-color: #ffd54a;
     cursor: pointer;
 }
+
+.optionsRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.wrHistoryButton {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--control-border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.wrHistoryButton:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}

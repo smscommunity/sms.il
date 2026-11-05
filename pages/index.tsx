@@ -17,6 +17,7 @@ import CategorySortControl, {
     resolveCategory,
 } from '../components/CategorySortControl';
 import FilterControl from '../components/FilterControl';
+import WRHistory from '../components/WRHistory';
 import buildCategoryStandings, {
     rerankIls,
     rerankVideoOnly,
@@ -41,6 +42,7 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
     const [selectedIL, setSelectedIL] = React.useState(-1);
     const [selectedSort, setSelectedSort] = React.useState(SORT_OVERALL);
     const [hasVideoOnly, setHasVideoOnly] = React.useState(false);
+    const [showWrHistory, setShowWrHistory] = React.useState(false);
     const controlledSelectedWorld = React.useState('none');
     const [selectedWorld, setSelectedWorld] = controlledSelectedWorld;
     const [tableWrapperRef, tableWidth] = useTableWidth();
@@ -53,6 +55,16 @@ const Home: NextPage<ILPageProps> = (props: ILPageProps) => {
         setSelectedIL(linkedIL);
         setSelectedWorld(linkedILData.world);
     }, [router.query.il]);
+
+    // The WR history belongs to one level; close it when the level changes.
+    React.useEffect(() => setShowWrHistory(false), [selectedIL]);
+    const openWrHistory = React.useCallback(() => setShowWrHistory(true), []);
+    const closeWrHistory = React.useCallback(() => setShowWrHistory(false), []);
+    // Players who still have a page, so WR history names can link to it.
+    const playerPages = React.useMemo(
+        () => new Map(playerData.map(player => [player.name.trim(), player.name] as [string, string])),
+        [playerData]
+    );
 
     const selectedCategory = resolveCategory(selectedSort, selectedIL != -1);
 
@@ -152,8 +164,18 @@ return (
           onSelectedSortChange={setSelectedSort}
           hasVideoOnly={hasVideoOnly}
           onHasVideoOnlyChange={setHasVideoOnly}
+          onWrHistoryClick={openWrHistory}
         />
       </div>
+      {showWrHistory && !!selectedILData && (
+        <WRHistory
+          level={selectedILData}
+          title={headerText}
+          videoOnly={hasVideoOnly}
+          playerPages={playerPages}
+          onClose={closeWrHistory}
+        />
+      )}
       <div ref={tableWrapperRef}>
         {selectedIL != -1 ? (
           <ILTable ils={filteredIls} />

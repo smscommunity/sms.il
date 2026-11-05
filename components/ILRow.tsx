@@ -66,7 +66,7 @@ export default function ILRow(props: ILRowProps) {
     );
 }
 
-function parseMilisecondsToUserTime(time: number) {
+export function parseMilisecondsToUserTime(time: number) {
     const minutes = Math.floor(time / (60 * 1000));
     const seconds = Math.floor((time % (60 * 1000)) / 1000);
     const hundredths = Math.floor(((time % (60 * 1000)) % 1000) / 10);
