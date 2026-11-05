@@ -4,7 +4,7 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: actions/cache@v4.2.0
         with:
           path: ${{ github.workspace }}/.next/cache
@@ -15,6 +15,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
       - name: Cache + Install
         uses: bahmutov/npm-install@v1
+      # The sheet isn't in the repo any more; use the copy the live site was built from.
+      # (No secrets needed, so this also works for PRs from forks.)
+      - name: Get the IL sheet
+        run: curl -fsSL --retry 3 -o data/ilsheet.xlsx https://ilview.sunmar.io/ilsheet.xlsx
       - name: Test
         run: npm run test --if-present
       - name: Build

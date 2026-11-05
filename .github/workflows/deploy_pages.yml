@@ -4,15 +4,66 @@ on:
     push:
         branches:
             - main
+    workflow_dispatch:
+    schedule:
+        # Check the IL sheet every 30 minutes
+        - cron: "*/30 * * * *"
+
+# One run at a time, so two runs never deploy or commit over each other.
+concurrency:
+    group: build-and-deploy
+    cancel-in-progress: false
+
+permissions:
+    contents: write
+
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v3
+            - uses: actions/checkout@v4
+
+            # The sheet is downloaded fresh on every run instead of being committed (see #6).
+            - name: Download the IL sheet
+              env:
+                SHEET_ID: ${{ secrets.SHEET_ID }}
+              run: curl -fsSL --retry 3 -o data/ilsheet.xlsx "https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=xlsx"
+
+            # The copy the live site was built from, published alongside it.
+            - name: Get the sheet the live site was built from
+              run: curl -fsSL --retry 3 -o "$RUNNER_TEMP/deployed.xlsx" https://ilview.sunmar.io/ilsheet.xlsx || echo "No deployed copy yet"
+
+            # Fails (and stops the deploy) if the download isn't a readable sheet.
+            - name: Update WR history
+              id: sheet
+              run: >
+                python3 scripts/wr_history/update.py
+                --sheet data/ilsheet.xlsx
+                --previous "$RUNNER_TEMP/deployed.xlsx"
+                --history public/wr-history.json
+                --github-output "$GITHUB_OUTPUT"
+
+            - name: Commit WR history
+              if: steps.sheet.outputs.history_changed == 'true'
+              uses: stefanzweifel/git-auto-commit-action@v4.12.0
+              with:
+                commit_message: Updating WR history
+                file_pattern: public/wr-history.json
+                commit_user_name: John IL, President of IL
+                commit_user_email: saveroftheframes@github.com
+                commit_author: John IL <saveroftheframes@github.com>
+
+            # Scheduled runs only rebuild when the leaderboard actually changed.
+            - name: Check whether to deploy
+              id: go
+              run: echo "deploy=${{ github.event_name != 'schedule' || steps.sheet.outputs.sheet_changed == 'true' || steps.sheet.outputs.history_changed == 'true' }}" >> "$GITHUB_OUTPUT"
+
+            - uses: actions/setup-node@v4
+              if: steps.go.outputs.deploy == 'true'
               with:
                 node-version: 16
             - uses: actions/cache@v4.2.0
+              if: steps.go.outputs.deploy == 'true'
               with:
                 path: ${{ github.workspace }}/.next/cache
                 # Generate a new cache whenever packages or source files change.
@@ -21,20 +72,28 @@ jobs:
                 restore-keys: |
                   ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
             - name: Cache + Install
+              if: steps.go.outputs.deploy == 'true'
               uses: bahmutov/npm-install@v1
             - name: Test
+              if: steps.go.outputs.deploy == 'true'
               run: npm run test --if-present
             - name: Build
+              if: steps.go.outputs.deploy == 'true'
               run: npm run build --if-present
             - name: Export
+              if: steps.go.outputs.deploy == 'true'
               run: |
                 npm run export
                 touch out/.nojekyll
+                cp data/ilsheet.xlsx out/ilsheet.xlsx
             - name: Deploy folder to pages
-              uses: peaceiris/actions-gh-pages@v3
+              if: steps.go.outputs.deploy == 'true'
+              uses: peaceiris/actions-gh-pages@v4
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_dir: ./out
                 cname: ilview.sunmar.io
                 user_name: 'John IL'
                 user_email: 'saveeveryframe@github.com'
+                # Keep gh-pages to a single commit instead of a new one every deploy.
+                force_orphan: true

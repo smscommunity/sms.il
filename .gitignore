@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# IL sheet: downloaded by the Build & Deploy workflow, never committed
+/data/ilsheet.xlsx
+
+# python
+__pycache__/
