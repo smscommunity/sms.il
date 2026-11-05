@@ -16,7 +16,3 @@ yarn dev
 
 Every 10 minutes the Build & Deploy workflow downloads the sheet, updates `public/wr-history.json`
 (`scripts/wr_history/update.py`), and rebuilds the site only if the leaderboard changed.
-
-## Todo
-
-Everything lolol.
