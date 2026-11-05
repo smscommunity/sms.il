@@ -16,11 +16,20 @@ concurrency:
 
 permissions:
     contents: write
+    actions: write # to re-enable the schedule below
 
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
+            # GitHub turns off schedules in public repos after 60 days without commits,
+            # which can happen when no WRs change. Re-enabling resets that timer.
+            - name: Keep the schedule alive
+              if: github.event_name == 'schedule'
+              env:
+                GH_TOKEN: ${{ github.token }}
+              run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/deploy_pages.yml/enable" || echo "Couldn't re-enable the schedule"
+
             - uses: actions/checkout@v4
 
             # The sheet is downloaded fresh on every run instead of being committed (see #6).
