@@ -6,8 +6,8 @@ on:
             - main
     workflow_dispatch:
     schedule:
-        # Check the IL sheet every 30 minutes
-        - cron: "*/30 * * * *"
+        # Check the IL sheet every 10 minutes
+        - cron: "*/10 * * * *"
 
 # One run at a time, so two runs never deploy or commit over each other.
 concurrency:
