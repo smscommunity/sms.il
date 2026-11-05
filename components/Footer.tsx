@@ -9,8 +9,8 @@ export interface FooterProps {
 export default function Footer(props: FooterProps) {
     return (
         <footer className={styles.ilFooter}>
-            Created by Lego // Maintained by Moderators |{' '}
-            <Tippy content={'This website updates approximately every 10 minutes.'}>
+            Created by Lego | Maintained by Moderators |{' '}
+            <Tippy content={'This website checks for updates every 10 minutes, and only updates if the sheet was.'}>
                 <span
                     style={{
                         padding: '0 4px',
