@@ -9,7 +9,7 @@ export interface FooterProps {
 export default function Footer(props: FooterProps) {
     return (
         <footer className={styles.ilFooter}>
-            Created by Lego | Maintained by Moderators |{' '}
+            Created by Lego | Updated by Zeldocto |{' '}
             <Tippy content={'This website checks for updates every 10 minutes, and only updates if the sheet was.'}>
                 <span
                     style={{
