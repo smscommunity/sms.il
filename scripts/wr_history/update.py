@@ -1,6 +1,6 @@
 """Bring public/wr-history.json up to date with a freshly downloaded IL sheet.
 
-Run by the Build & Deploy workflow every 30 minutes:
+Run by the Build & Deploy workflow every 10 minutes:
 
     python3 scripts/wr_history/update.py --sheet data/ilsheet.xlsx --previous deployed.xlsx \
         --history public/wr-history.json --github-output "$GITHUB_OUTPUT"

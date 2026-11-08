@@ -5,8 +5,14 @@ on:
         branches:
             - main
     workflow_dispatch:
+        inputs:
+            only_if_changed:
+                description: Skip the rebuild if the leaderboard hasn't changed
+                type: boolean
+                default: false
+    # GitHub runs this schedule hours late, so an external cron also dispatches this workflow
+    # every 10 minutes with only_if_changed=true. The schedule stays as a backup.
     schedule:
-        # Check the IL sheet every 10 minutes
         - cron: "*/10 * * * *"
 
 # One run at a time, so two runs never deploy or commit over each other.
@@ -62,10 +68,11 @@ jobs:
                 commit_user_email: saveroftheframes@github.com
                 commit_author: John IL <saveroftheframes@github.com>
 
-            # Scheduled runs only rebuild when the leaderboard actually changed.
+            # Scheduled and cron-dispatched runs only rebuild when the leaderboard actually changed.
+            # (format() because the input can arrive as a boolean or a string.)
             - name: Check whether to deploy
               id: go
-              run: echo "deploy=${{ github.event_name != 'schedule' || steps.sheet.outputs.sheet_changed == 'true' || steps.sheet.outputs.history_changed == 'true' }}" >> "$GITHUB_OUTPUT"
+              run: echo "deploy=${{ !(github.event_name == 'schedule' || format('{0}', inputs.only_if_changed) == 'true') || steps.sheet.outputs.sheet_changed == 'true' || steps.sheet.outputs.history_changed == 'true' }}" >> "$GITHUB_OUTPUT"
 
             - uses: actions/setup-node@v4
               if: steps.go.outputs.deploy == 'true'
