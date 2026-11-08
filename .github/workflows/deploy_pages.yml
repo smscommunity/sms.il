@@ -48,6 +48,16 @@ jobs:
             - name: Get the sheet the live site was built from
               run: curl -fsSL --retry 3 -o "$RUNNER_TEMP/deployed.xlsx" https://ilview.sunmar.io/ilsheet.xlsx || echo "No deployed copy yet"
 
+            # main is protected, so the bot keeps the up-to-date history on its own wr-history branch.
+            # The copy in main is only the starting point for when that branch doesn't exist yet.
+            - name: Get the latest WR history
+              run: |
+                if git fetch --depth=1 origin +refs/heads/wr-history:refs/remotes/origin/wr-history; then
+                  git show origin/wr-history:wr-history.json > public/wr-history.json
+                else
+                  echo "No wr-history branch yet; starting from the copy in main"
+                fi
+
             # Fails (and stops the deploy) if the download isn't a readable sheet.
             - name: Update WR history
               id: sheet
@@ -58,15 +68,21 @@ jobs:
                 --history public/wr-history.json
                 --github-output "$GITHUB_OUTPUT"
 
+            # Commits just wr-history.json onto the wr-history branch, without touching the checkout.
+            # If that branch moved since it was fetched, the push is rejected rather than overwriting it.
             - name: Commit WR history
               if: steps.sheet.outputs.history_changed == 'true'
-              uses: stefanzweifel/git-auto-commit-action@v4.12.0
-              with:
-                commit_message: Updating WR history
-                file_pattern: public/wr-history.json
-                commit_user_name: John IL, President of IL
-                commit_user_email: saveroftheframes@github.com
-                commit_author: John IL <saveroftheframes@github.com>
+              env:
+                GIT_AUTHOR_NAME: John IL
+                GIT_AUTHOR_EMAIL: saveroftheframes@github.com
+                GIT_COMMITTER_NAME: John IL, President of IL
+                GIT_COMMITTER_EMAIL: saveroftheframes@github.com
+              run: |
+                blob=$(git hash-object -w public/wr-history.json)
+                tree=$(printf '100644 blob %s\twr-history.json\n' "$blob" | git mktree)
+                parent=$(git rev-parse -q --verify refs/remotes/origin/wr-history || true)
+                commit=$(git commit-tree "$tree" ${parent:+-p "$parent"} -m "Updating WR history")
+                git push origin "$commit:refs/heads/wr-history"
 
             # Scheduled and cron-dispatched runs only rebuild when the leaderboard actually changed.
             # (format() because the input can arrive as a boolean or a string.)
