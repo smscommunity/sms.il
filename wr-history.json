@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-12T16:00Z",
+ "generated": "2026-11-12T16:10Z",
  "from": "2021-09-08",
  "to": "2026-11-12",
  "snapshots": 1768,
@@ -12683,7 +12683,26 @@
      ],
      "dropped": [
       "ink"
-     ]
+     ],
+     "reverted": true
+    },
+    {
+     "date": "2026-11-12",
+     "type": "removed",
+     "time": 15370,
+     "players": [
+      {
+       "name": "ink",
+       "link": "https://youtu.be/JA-sgoCHNk4"
+      }
+     ],
+     "added": [
+      "ink"
+     ],
+     "dropped": [
+      "Basten"
+     ],
+     "reverted": true
     }
    ],
    "historyVideo": [
