@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-08T14:40Z",
+ "generated": "2026-11-12T16:00Z",
  "from": "2021-09-08",
- "to": "2026-11-08",
+ "to": "2026-11-12",
  "snapshots": 1768,
  "notes": [
   "Built from daily snapshots of data/ilsheet.xlsx in git history (last commit of each UTC day).",
@@ -12669,6 +12669,20 @@
        "name": "ink",
        "link": "https://youtu.be/JA-sgoCHNk4"
       }
+     ]
+    },
+    {
+     "date": "2026-11-12",
+     "type": "wr",
+     "time": 15140,
+     "players": [
+      {
+       "name": "Basten",
+       "link": null
+      }
+     ],
+     "dropped": [
+      "ink"
      ]
     }
    ],
