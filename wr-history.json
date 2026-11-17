@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T03:40Z",
+ "generated": "2026-11-17T07:10Z",
  "from": "2021-09-08",
  "to": "2026-11-17",
  "snapshots": 1768,
@@ -13464,6 +13464,17 @@
        "link": "https://youtu.be/KUXOYLAh-ag"
       }
      ]
+    },
+    {
+     "date": "2026-11-17",
+     "type": "wr",
+     "time": 38700,
+     "players": [
+      {
+       "name": "Basten",
+       "link": "https://youtu.be/mO7DMNzsFY0"
+      }
+     ]
     }
    ],
    "historyVideo": [
@@ -13611,6 +13622,17 @@
       {
        "name": "Basten",
        "link": "https://youtu.be/KUXOYLAh-ag"
+      }
+     ]
+    },
+    {
+     "date": "2026-11-17",
+     "type": "wr",
+     "time": 38700,
+     "players": [
+      {
+       "name": "Basten",
+       "link": "https://youtu.be/mO7DMNzsFY0"
       }
      ]
     }
