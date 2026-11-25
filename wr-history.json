@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-17T07:10Z",
+ "generated": "2026-11-25T07:20Z",
  "from": "2021-09-08",
- "to": "2026-11-17",
+ "to": "2026-11-25",
  "snapshots": 1768,
  "notes": [
   "Built from daily snapshots of data/ilsheet.xlsx in git history (last commit of each UTC day).",
@@ -16542,6 +16542,17 @@
        "link": "https://www.youtube.com/watch?v=_PKXM_0aL0E"
       }
      ]
+    },
+    {
+     "date": "2026-11-25",
+     "type": "wr",
+     "time": 29690,
+     "players": [
+      {
+       "name": "ink",
+       "link": "https://www.twitch.tv/videos/2940149163"
+      }
+     ]
     }
    ],
    "historyVideo": [
@@ -16603,6 +16614,17 @@
       {
        "name": "ink",
        "link": "https://www.youtube.com/watch?v=_PKXM_0aL0E"
+      }
+     ]
+    },
+    {
+     "date": "2026-11-25",
+     "type": "wr",
+     "time": 29690,
+     "players": [
+      {
+       "name": "ink",
+       "link": "https://www.twitch.tv/videos/2940149163"
       }
      ]
     }
